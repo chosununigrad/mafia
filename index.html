@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
 <title>마피아 게임</title>
 <script src="https://unpkg.com/mqtt@5.16.1/dist/mqtt.min.js"></script>
 <style>
@@ -159,11 +159,39 @@
   .result li{display:flex;gap:10px;align-items:center;padding:6px 0;border-bottom:1px solid var(--line)}
   #lightbox img{max-width:95vw;max-height:90vh;border-radius:10px}
 
+  #sideToggle{display:none}
+  #sheet{display:contents}
+  #playerSide{grid-column:1;grid-row:1}
+  .chat{grid-column:2;grid-row:1}
+  #configSide{grid-column:3;grid-row:1}
+
+  /* ---------- 휴대폰: 화면에 고정된 메신저형 배치 ---------- */
   @media (max-width:900px){
-    main,main.lobby{grid-template-columns:1fr;overflow:auto}
-    #room{height:auto;min-height:100vh}
-    .chat{order:-1;height:62vh}
-    #timer{font-size:24px}
+    html,body{height:100%;overflow:hidden;overscroll-behavior:none}
+    #home{height:100%;overflow-y:auto;padding:30px 16px}
+    #room{position:fixed;left:0;right:0;top:0;height:var(--appH,100dvh);max-width:none;padding:6px 8px calc(6px + env(safe-area-inset-bottom))}
+    header{gap:6px;padding:2px 0 6px;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}
+    header::-webkit-scrollbar{display:none}
+    header > *{flex:none}
+    #phase{font-size:15px}
+    .code{font-size:11.5px;padding:4px 7px}
+    .hbtn{padding:5px 8px;font-size:12px}
+    #btnCopy,#net{display:none}
+    #timer{font-size:22px;min-width:auto}
+    main,main.lobby{display:flex;flex-direction:column;gap:6px;position:relative;min-height:0}
+    #sideToggle{display:flex;justify-content:space-between;align-items:center;width:100%;padding:9px 12px;font-size:14px;border-radius:12px;background:var(--panel)}
+    #sideToggle.cue{border-color:var(--accent);color:var(--accent);font-weight:700;animation:glow 1.6s infinite}
+    @keyframes glow{50%{box-shadow:0 0 0 3px rgba(224,176,74,.25)}}
+    #sheet{display:none;position:absolute;top:46px;left:0;right:0;max-height:calc(100% - 52px);overflow-y:auto;z-index:20;
+           background:var(--bg);border-radius:14px;box-shadow:0 14px 40px rgba(0,0,0,.65);padding-bottom:4px}
+    main.sheetOpen #sheet{display:block}
+    #sheet .side{overflow:visible}
+    #sheet .card{margin-bottom:8px}
+    .chat{flex:1;min-height:0;margin:0}
+    #log{padding:10px;min-height:0}
+    .m .body{max-width:80%}
+    .composer{padding:8px}
+    #chatForm input{padding:10px 14px;font-size:16px}
   }
 </style>
 </head>
@@ -212,7 +240,9 @@
     <button class="ghost hbtn" id="btnLeave">나가기</button>
   </header>
   <main id="main">
-    <aside class="side">
+    <button type="button" id="sideToggle" class="ghost"></button>
+    <div id="sheet">
+    <aside class="side" id="playerSide">
       <div class="card">
         <div id="hint"></div>
         <div id="skipBox"></div>
@@ -221,19 +251,20 @@
         <div id="compo"></div>
       </div>
     </aside>
+    <aside class="side" id="configSide"><div class="card" id="configCard"></div></aside>
+    </div>
     <div class="card chat">
       <div id="log"></div>
       <div class="composer">
         <span id="chanLabel"></span>
         <form id="chatForm" autocomplete="off">
           <button type="button" id="btnPhoto" title="사진 보내기">📷</button>
-          <input id="chatInput" maxlength="200" placeholder="메시지 입력">
+          <input id="chatInput" maxlength="200" placeholder="메시지 입력 (사진 붙여넣기 가능)">
           <button type="submit">전송</button>
         </form>
         <input type="file" id="photoInput" accept="image/*" class="hidden">
       </div>
     </div>
-    <aside class="side" id="configSide"><div class="card" id="configCard"></div></aside>
   </main>
 </section>
 
@@ -620,13 +651,32 @@ $('#lightbox').onclick = () => $('#lightbox').classList.add('hidden');
 $('#btnPhoto').onclick = () => { if (!$('#chatInput').disabled) $('#photoInput').click(); };
 $('#photoInput').addEventListener('change', async e => {
   const f = e.target.files[0]; e.target.value = '';
-  if (!f || !f.type.startsWith('image/')) return;
+  sendImageFile(f);
+});
+async function sendImageFile(f){
+  if (!f || !f.type || !f.type.startsWith('image/')) return false;
+  if ($('#chatInput').disabled) { sysLine('지금은 채팅을 보낼 수 없어요.', true); return true; }
   try {
     const url = await shrinkImage(f);
     send({ type:'chat', text: $('#chatInput').value.trim(), img: url });
     $('#chatInput').value = '';
   } catch(err) { sysLine('사진을 불러오지 못했어요.', true); }
+  return true;
+}
+// 붙여넣기(Ctrl+V / 길게 눌러 붙여넣기)로 바로 사진 보내기
+document.addEventListener('paste', e => {
+  if (!S || $('#room').classList.contains('hidden')) return;
+  const items = [...((e.clipboardData && e.clipboardData.items) || [])];
+  const it = items.find(i => i.kind === 'file' && i.type.startsWith('image/'));
+  if (!it) return;
+  e.preventDefault();
+  sendImageFile(it.getAsFile());
 });
+// 사진을 채팅창에 끌어다 놓아도 전송
+['dragover','drop'].forEach(ev => $('#log').addEventListener(ev, e => {
+  e.preventDefault();
+  if (ev === 'drop' && e.dataTransfer && e.dataTransfer.files[0]) sendImageFile(e.dataTransfer.files[0]);
+}));
 function shrinkImage(file){
   return new Promise((resolve, reject) => {
     const r = new FileReader();
@@ -692,6 +742,11 @@ function phaseFx(text, sub){
 function effects(prev, s){
   const ph = s.phase, pph = prev && prev.phase;
   Music.setMode(ph === 'vote' ? 'tense' : ph === 'night' ? 'night' : 'calm');
+  if (ph !== pph && isMobile()) {
+    const actRoles = ['mafia','doctor','police','spy','reporter','gangster','lover'];
+    const needs = (ph === 'vote' && s.alive && !s.blockedMe) || (ph === 'night' && s.alive && actRoles.includes(s.myRole) && s.myRole !== 'lover');
+    setTimeout(() => setSheet(needs), needs ? 2300 : 0);   // 투표/능력 사용 때는 자동으로 펼침
+  }
   if (ph !== pph) {
     if (ph === 'day') { phaseFx(`☀️ ${s.day}일차 아침`, '토론을 시작하세요'); Music.sfx('bell'); }
     if (ph === 'vote') phaseFx('🗳️ 투표 시간', '처형할 사람을 고르세요');
@@ -718,6 +773,39 @@ function showResult(s){
       <button id="resClose">닫기</button></div>`;
   ov.classList.remove('hidden');
   $('#resClose').onclick = () => ov.classList.add('hidden');
+}
+
+/* ================= 휴대폰 화면 맞춤 ================= */
+// 키보드가 올라와도 화면 전체가 밀려 올라가지 않도록, 실제로 보이는 영역 크기에 맞춰 고정해요.
+const isMobile = () => window.matchMedia('(max-width:900px)').matches;
+function fitViewport(){
+  const vv = window.visualViewport;
+  const h = vv ? vv.height : window.innerHeight;
+  const log = $('#log');
+  const atBottom = log.scrollHeight - log.scrollTop - log.clientHeight < 120;
+  document.documentElement.style.setProperty('--appH', Math.round(h) + 'px');
+  $('#room').style.top = isMobile() && vv ? Math.round(vv.offsetTop) + 'px' : '';
+  if (atBottom) log.scrollTop = log.scrollHeight;
+}
+if (window.visualViewport) { visualViewport.addEventListener('resize', fitViewport); visualViewport.addEventListener('scroll', fitViewport); }
+window.addEventListener('resize', fitViewport);
+fitViewport();
+$('#chatInput').addEventListener('focus', () => { setSheet(false); setTimeout(fitViewport, 300); });
+
+function setSheet(open){ $('#main').classList.toggle('sheetOpen', open); if (S) renderToggle(S); }
+$('#sideToggle').onclick = () => setSheet(!$('#main').classList.contains('sheetOpen'));
+function renderToggle(s){
+  const alive = s.players.filter(p => p.alive).length, n = s.players.length;
+  const actRoles = ['mafia','doctor','police','spy','reporter','gangster'];
+  let cue = '';
+  if (s.phase === 'lobby') cue = isHost ? '⚙️ 설정 · 게임 시작' : '⚙️ 역할 구성 보기';
+  else if (s.phase === 'vote' && s.alive && !s.blockedMe) cue = s.myVote ? '🗳️ 투표 완료' : '🗳️ 투표하기';
+  else if (s.phase === 'night' && s.alive && actRoles.includes(s.myRole) && !(s.myRole === 'reporter' && s.myUsed && !s.myAction)) cue = s.myAction ? '🌙 선택 완료' : '🌙 능력 사용하기';
+  else if (s.phase === 'end') cue = isHost ? '🔁 다시 하기' : '';
+  const open = $('#main').classList.contains('sheetOpen');
+  const t = $('#sideToggle');
+  t.innerHTML = `<span>👥 참가자 ${s.phase === 'lobby' ? n : `${alive}/${n}`}${cue ? ' · ' + cue : ''}</span><span>${open ? '닫기 ▴' : '열기 ▾'}</span>`;
+  t.classList.toggle('cue', !open && /하기|사용하기/.test(cue));
 }
 
 /* ================= 화면 그리기 ================= */
@@ -813,7 +901,8 @@ function render(){
   }
   const cl = $('#chanLabel'); cl.textContent = label; cl.className = cls;
   $('#chatInput').disabled = !can; $('#btnPhoto').disabled = !can;
-  $('#chatInput').placeholder = can ? '메시지 입력' : '밤에는 조용히...';
+  $('#chatInput').placeholder = can ? '메시지 입력 (사진 붙여넣기 가능)' : '밤에는 조용히...';
+  renderToggle(s);
 }
 
 function renderConfig(s, err){
@@ -844,6 +933,7 @@ document.addEventListener('click', e => {
   const a = b.dataset.act, id = b.dataset.id;
   if (a === 'vote') send({ type:'vote', target: S.myVote === id ? null : id });
   else if (a === 'act') send({ type:'act', target: id });
+  if ((a === 'vote' || a === 'act') && isMobile()) setTimeout(() => setSheet(false), 700);
   else if (a === 'start') send({ type:'start' });
   else if (a === 'skip') send({ type:'skip' });
   else if (a === 'restart') send({ type:'restart' });
