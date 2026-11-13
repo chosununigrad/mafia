@@ -157,6 +157,74 @@
   .result h2{font-size:34px;margin:0 0 6px}
   .result ul{list-style:none;padding:0;margin:16px 0;text-align:left;max-height:40vh;overflow:auto}
   .result li{display:flex;gap:10px;align-items:center;padding:6px 0;border-bottom:1px solid var(--line)}
+  .rcard{width:250px;min-height:340px;border-radius:20px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:22px;text-align:center;cursor:pointer;box-shadow:0 20px 50px rgba(0,0,0,.6);animation:pop .35s ease}
+  @keyframes pop{from{transform:scale(.85);opacity:0}to{transform:scale(1);opacity:1}}
+  .rcard.back{background:repeating-linear-gradient(45deg,#3a1418 0 12px,#2a0e11 12px 24px);border:3px solid var(--accent)}
+  .rcard.back .q{font-size:80px;color:var(--accent);font-weight:900}
+  .rcard.back .tap{margin-top:14px;color:#f3dca4;font-size:14px}
+  .rcard.front{background:linear-gradient(160deg,#2b2f45,#151826);border:3px solid var(--accent)}
+  .rcard.front.t-mafia{background:linear-gradient(160deg,#4a1418,#1a0709);border-color:var(--red)}
+  .rcard .ic{font-size:66px}.rcard .nm{font-size:30px;font-weight:900;margin:6px 0 8px}
+  .rcard .ds{font-size:13px;color:#c9cde0;line-height:1.55}
+  .rcard .how{font-size:12.5px;color:#f3dca4;line-height:1.5;margin-top:10px;background:rgba(0,0,0,.25);padding:8px;border-radius:10px}
+  .rcard .mt{margin-top:10px;font-size:13px;color:#ffb3b0;font-weight:700}
+  #myCardBtn{width:100%;margin-bottom:10px}
+  .mbox{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:20px;max-width:560px;width:100%;max-height:86vh;overflow-y:auto}
+  .mbox h2{margin:0 0 12px;font-size:20px}
+  .guide-row{display:flex;gap:12px;padding:10px 0;border-bottom:1px solid var(--line)}
+  .guide-row .gi{font-size:30px;width:40px;text-align:center;flex:none}
+  .guide-row b{font-size:15px}
+  .guide-row .gd{font-size:13px;color:var(--muted);margin:3px 0;line-height:1.5}
+  .guide-row .gh{font-size:13px;line-height:1.5;color:var(--text)}
+  .guide-row .gh::before{content:'👉 사용법: ';color:var(--accent);font-weight:700}
+  .m .rbtn{background:none;border:0;color:var(--muted);padding:0 4px;font-size:13px;cursor:pointer;opacity:.7}
+  .m .rbtn:hover{opacity:1;color:var(--accent)}
+  .rq{font-size:12.5px;border-left:3px solid var(--accent);padding:3px 8px;margin:0 0 6px;border-radius:4px;background:rgba(0,0,0,.18);cursor:pointer;opacity:.9;max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .m.mine .rq{background:rgba(0,0,0,.12);border-left-color:#5a3d00}
+  .m.flash .bub{animation:flash 1.2s}
+  @keyframes flash{30%{box-shadow:0 0 0 3px var(--accent)}}
+  #replyBar{display:flex;align-items:center;gap:8px;font-size:13px;background:var(--panel2);border-left:3px solid var(--accent);padding:6px 10px;border-radius:8px;margin-bottom:8px}
+  #replyBar span{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  #replyBar button{background:none;color:var(--muted);padding:0 4px;font-size:16px}
+  /* ---------- 루미큐브 ---------- */
+  body.ph-rk{--bg:#0f1a14;--panel:#16251c;--panel2:#1e3326;--line:#2b4636;--bubble:#22382b}
+  main.rk{grid-template-columns:230px 1fr 340px}
+  main.rk #rkArea{display:flex}
+  main.rk .chat{grid-column:3}
+  #rkArea{display:none;grid-column:2;grid-row:1;flex-direction:column;min-height:0;gap:8px}
+  .rkbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:14px}
+  .rkbar .turn{font-weight:800;font-size:16px}
+  .rkbar .turn.mine{color:var(--accent)}
+  .rkbar .pool{color:var(--muted);font-size:13px}
+  .board{flex:1;min-height:120px;overflow:auto;padding:12px;border-radius:16px;display:flex;flex-wrap:wrap;gap:10px;align-content:flex-start;
+         background:radial-gradient(ellipse at center,#1f5a3a 0%,#123824 100%);border:1px solid #2e6b49;box-shadow:inset 0 0 40px rgba(0,0,0,.45)}
+  .board .empty{color:rgba(255,255,255,.45);font-size:14px;margin:auto;text-align:center}
+  .rkset{display:flex;gap:3px;padding:6px;border-radius:10px;background:rgba(0,0,0,.2);border:2px solid transparent;align-items:center;min-height:58px}
+  .rkset.bad{border-color:var(--red);background:rgba(226,85,79,.15)}
+  .rkset.target{cursor:pointer}
+  .slot{width:34px;height:46px;border-radius:6px;border:2px dashed rgba(255,255,255,.55);color:#fff;display:flex;align-items:center;justify-content:center;font-size:20px;cursor:pointer;flex:none;background:rgba(255,255,255,.06)}
+  .slot:hover{background:rgba(255,255,255,.18)}
+  .newset{min-height:58px;padding:6px 12px;border-radius:10px;border:2px dashed rgba(255,255,255,.55);color:#fff;display:flex;align-items:center;cursor:pointer;font-size:14px;background:rgba(255,255,255,.06)}
+  .tile{width:34px;height:46px;border-radius:6px;background:linear-gradient(#fffdf6,#ece2c8);box-shadow:0 2px 0 #b5a985,0 3px 6px rgba(0,0,0,.35);
+        display:flex;align-items:center;justify-content:center;font-weight:900;font-size:19px;cursor:pointer;user-select:none;-webkit-user-select:none;flex:none;transition:transform .1s;position:relative}
+  .tile.c0{color:#1b1b1b}.tile.c1{color:#d3232c}.tile.c2{color:#1d5fd6}.tile.c3{color:#e58a00}
+  .tile.jk{color:#d3232c;font-size:22px}
+  .tile.sel{transform:translateY(-7px);box-shadow:0 0 0 3px var(--accent),0 8px 12px rgba(0,0,0,.45)}
+  .tile.fresh::after{content:'';position:absolute;top:3px;right:3px;width:6px;height:6px;border-radius:50%;background:var(--green)}
+  .rackWrap{background:linear-gradient(#6b4423,#4a2d15);border-radius:14px;padding:8px 10px;box-shadow:inset 0 2px 0 rgba(255,255,255,.15)}
+  .rack{display:flex;flex-wrap:wrap;gap:4px;min-height:50px;align-items:center}
+  .rackTools{display:flex;gap:6px;align-items:center;margin-bottom:6px;font-size:12.5px;color:#f1dcc0;flex-wrap:wrap}
+  .rackTools button{padding:4px 9px;font-size:12px;background:rgba(0,0,0,.25);color:#fff;border:1px solid rgba(255,255,255,.25)}
+  .rackTools button.on{background:var(--accent);color:#222}
+  .rkActions{display:flex;gap:8px;flex-wrap:wrap}
+  .rkActions button{flex:1;min-width:120px}
+  .rkmsg{font-size:13px;color:var(--accent)}
+  .rkmsg.bad{color:#ff8f8a}
+  .cnt-badge{font-size:11.5px;padding:2px 7px;border-radius:6px;background:#e9dfc4;color:#3a2b10;font-weight:800}
+  #players li.turn{background:rgba(224,176,74,.15);border-radius:8px}
+  .gamepick{display:flex;gap:8px;margin-bottom:12px}
+  .gamepick button{flex:1;padding:10px 6px;font-size:14px}
+  .gamepick button.on{background:var(--accent);color:#222;border-color:var(--accent)}
   #lightbox img{max-width:95vw;max-height:90vh;border-radius:10px}
 
   #sideToggle{display:none}
@@ -176,7 +244,7 @@
     #phase{font-size:15px}
     .code{font-size:11.5px;padding:4px 7px}
     .hbtn{padding:5px 8px;font-size:12px}
-    #btnCopy,#net{display:none}
+    #net{display:none}
     #timer{font-size:22px;min-width:auto}
     main,main.lobby{display:flex;flex-direction:column;gap:6px;position:relative;min-height:0}
     #sideToggle{display:flex;justify-content:space-between;align-items:center;width:100%;padding:9px 12px;font-size:14px;border-radius:12px;background:var(--panel)}
@@ -188,6 +256,18 @@
     #sheet .side{overflow:visible}
     #sheet .card{margin-bottom:8px}
     .chat{flex:1;min-height:0;margin:0}
+    main.rk #rkArea{flex:1.5;min-height:0}
+    main.rk .chat{flex:1;min-height:170px}
+    .board{padding:8px;gap:6px;min-height:90px}
+    .tile,.slot{width:26px;height:36px;font-size:15px;border-radius:5px}
+    .tile.jk{font-size:17px}
+    .rkset,.newset{min-height:46px;padding:4px}
+    .rkActions button{min-width:0;padding:9px 6px;font-size:13px;white-space:nowrap}
+    .rkActions div{display:none}
+    main.rk #rkArea{overflow:hidden;gap:6px}
+    main.rk .chat{min-height:200px}
+    .rackWrap{padding:6px 8px}
+    .rackTools{margin-bottom:4px}
     #log{padding:10px;min-height:0}
     .m .body{max-width:80%}
     .composer{padding:8px}
@@ -199,13 +279,18 @@
 
 <!-- ===== 시작 화면 ===== -->
 <section id="home">
-  <h1>🕵️ MAFIA</h1>
-  <div class="sub">닉네임만 정하고 바로 시작하세요</div>
+  <h1>🎲 게임방</h1>
+  <div class="sub">🕵️ 마피아 · 🀄 루미큐브 — 닉네임만 정하고 바로 시작</div>
+  <div id="inviteBox" class="card hidden" style="text-align:center;border-color:var(--accent)">
+    <div style="font-size:15px">🎟️ <b id="inviteCode"></b> 방에 초대받았어요!</div>
+    <div style="font-size:12.5px;color:var(--muted);margin-top:4px">닉네임을 정하고 입장하세요</div>
+  </div>
   <div class="card">
     <label for="nick">닉네임</label>
     <input id="nick" maxlength="10" placeholder="최대 10자" autocomplete="off">
   </div>
-  <div class="card">
+  <button id="btnInviteJoin" class="hidden" style="width:100%;margin-bottom:14px;padding:14px;font-size:17px">입장하기</button>
+  <div class="card" id="createJoinBox">
     <button id="btnCreate" style="width:100%">새 방 만들기</button>
     <div style="text-align:center;color:var(--muted);margin:14px 0;font-size:13px">또는 친구 방에 참가</div>
     <div class="row">
@@ -220,10 +305,14 @@
     · <b>낮</b> 모두 채팅(사진 가능)으로 토론하며 마피아를 추리해요.<br>
     · <b>투표</b> 처형할 사람에게 투표하거나 기권해요. 모두 끝내면 바로 마감돼요.<br>
     · <b>밤</b> 마피아끼리 비밀 채팅으로 상의해 한 명을 제거해요. 능력자들도 능력을 써요.<br>
-    · 내 직업은 🃏 버튼을 눌렀을 때만 카드로 보여요.<br>
-    · 마피아가 모두 죽으면 <b>시민 승리</b>, 마피아 팀 수가 나머지와 같아지면 <b>마피아 승리</b>.
+    · 내 직업은 🃏 버튼을 눌렀을 때만 카드로 보여요. 역할 사용법은 📖 버튼에 있어요.<br>
+    · 마피아가 모두 죽으면 <b>시민 승리</b>, 마피아 팀 수가 나머지와 같아지면 <b>마피아 승리</b>.<br><br>
+    <b>🀄 루미큐브</b> (2~5명)<br>
+    · 같은 숫자 다른 색 3~4장(그룹), 또는 같은 색 연속 숫자 3장 이상(런)을 내려놓아요.<br>
+    · 첫 등록은 내 타일로만 30점 이상. 이후엔 테이블 타일을 자유롭게 재배치할 수 있어요.<br>
+    · 낼 게 없으면 한 장 뽑기. 먼저 타일을 다 내려놓으면 승리!
   </div>
-  <div class="ver">버전 v5 · 모두 같은 버전 파일로 접속해야 해요</div>
+  <div class="ver">버전 v6 · 모두 같은 버전 파일로 접속해야 해요</div>
 </section>
 
 <!-- ===== 게임 화면 ===== -->
@@ -231,8 +320,10 @@
   <header>
     <div id="phase">대기실</div>
     <div class="code">방 코드 <b id="code">-----</b></div>
-    <button class="ghost hbtn" id="btnCopy">복사</button>
+    <button class="ghost hbtn" id="btnInvite">🔗 초대</button>
     <button class="ghost hbtn hidden" id="btnCard">🃏 내 직업</button>
+    <button class="ghost hbtn" id="btnGuide">📖 역할</button>
+    <button class="ghost hbtn" id="btnRename">✏️ 이름</button>
     <button class="ghost hbtn" id="btnBgm">🎵 BGM 켜기</button>
     <span id="net"></span>
     <div class="spacer"></div>
@@ -253,9 +344,21 @@
     </aside>
     <aside class="side" id="configSide"><div class="card" id="configCard"></div></aside>
     </div>
+    <div id="rkArea">
+      <div class="rkbar"><span class="turn" id="rkTurn"></span><span class="pool" id="rkPool"></span><span class="rkmsg" id="rkMsg"></span></div>
+      <div class="board" id="rkBoard"></div>
+      <div class="rackWrap">
+        <div class="rackTools"><span>내 타일 <b id="rkCount"></b></span>
+          <button data-rk="sortnum" id="sortNum">숫자순</button><button data-rk="sortcol" id="sortCol">색깔순</button>
+          <span style="flex:1"></span><span id="rkMeld"></span></div>
+        <div class="rack" id="rkRack"></div>
+      </div>
+      <div class="rkActions" id="rkActions"></div>
+    </div>
     <div class="card chat">
       <div id="log"></div>
       <div class="composer">
+        <div id="replyBar" class="hidden"><span></span><button type="button" id="replyX">✕</button></div>
         <span id="chanLabel"></span>
         <form id="chatForm" autocomplete="off">
           <button type="button" id="btnPhoto" title="사진 보내기">📷</button>
@@ -269,6 +372,7 @@
 </section>
 
 <div id="cardOverlay" class="overlay hidden"></div>
+<div id="modal" class="overlay hidden"></div>
 <div id="resultOverlay" class="overlay hidden"></div>
 <div id="lightbox" class="overlay hidden"><img alt=""></div>
 <div id="phaseFx"><div></div></div>
@@ -281,18 +385,18 @@ const DUR_OPTS = { day:[60,90,120,180,240,300], vote:[20,30,45,60], night:[20,30
 const MC = '🎙️ 사회자';
 
 const ROLE = {
-  mafia:      { name:'마피아', icon:'🔪', team:'mafia',   max:4, desc:'밤마다 마피아끼리 비밀 채팅으로 상의해 한 명을 제거해요.' },
-  spy:        { name:'스파이', icon:'🕶️', team:'mafia',   max:1, desc:'마피아 팀. 밤마다 한 명의 정확한 직업을 알아내요. 마피아를 찾으면 접선해서 마피아 채팅에 합류해요.' },
-  traitor:    { name:'배신자', icon:'🐍', team:'mafia',   max:1, desc:'마피아 팀이지만 능력은 없어요. 나는 마피아가 누군지 알지만 마피아는 나를 몰라요. 경찰 조사에선 시민으로 나와요.' },
-  doctor:     { name:'의사',   icon:'💉', team:'special', max:1, desc:'밤마다 한 명을 치료해요. 마피아가 그 사람을 노리면 살려내요. 자신도 치료할 수 있어요.' },
-  police:     { name:'경찰',   icon:'🔍', team:'special', max:1, desc:'밤마다 한 명을 조사해 마피아인지 바로 알아내요. (스파이·배신자는 마피아로 나오지 않아요)' },
-  soldier:    { name:'군인',   icon:'🪖', team:'special', max:1, desc:'마피아의 공격을 한 번 버텨낼 수 있어요.' },
-  politician: { name:'정치인', icon:'🎩', team:'special', max:1, desc:'투표로 처형되지 않고, 내 투표는 2표로 계산돼요.' },
-  medium:     { name:'영매',   icon:'🔮', team:'special', max:1, desc:'죽은 사람들의 대화를 항상 볼 수 있고, 밤에는 그들과 대화할 수 있어요.' },
-  reporter:   { name:'기자',   icon:'📰', team:'special', max:1, desc:'게임 중 한 번, 밤에 한 명을 취재해 다음 날 아침 그 사람의 직업을 모두에게 공개해요. 그날 밤 기자가 죽으면 무산돼요.' },
-  gangster:   { name:'건달',   icon:'👊', team:'special', max:1, desc:'밤마다 한 명을 협박해 다음 투표에서 투표하지 못하게 해요.' },
-  lover:      { name:'연인',   icon:'💞', team:'special', max:2, step:2, desc:'2명이 한 쌍. 서로가 연인인 걸 알고 밤에 둘만 비밀 대화를 할 수 있어요. 한 명이 죽으면 남은 연인도 슬픔에 따라 죽어요.' },
-  citizen:    { name:'시민',   icon:'👤', team:'citizen', max:99, desc:'특별한 능력은 없어요. 토론과 투표로 마피아를 찾아내세요!' }
+  mafia:      { name:'마피아', icon:'🔪', team:'mafia',   max:4, desc:'밤마다 마피아끼리 비밀 채팅으로 상의해 한 명을 제거해요.', how:'밤이 되면 👥 참가자 목록에서 죽일 사람 옆 [지목] 버튼을 누르세요. 마피아가 여러 명이면 마지막으로 지목한 사람이 적용돼요. 밤에는 채팅이 마피아끼리만 보이니 상의하세요.' },
+  spy:        { name:'스파이', icon:'🕶️', team:'mafia',   max:1, desc:'마피아 팀. 밤마다 한 명의 정확한 직업을 알아내요. 마피아를 찾으면 접선해서 마피아 채팅에 합류해요.', how:'밤에 참가자 옆 [조사] 버튼을 누르면(하룻밤 1번) 그 사람의 정확한 직업이 사회자 귓속말로 와요. 마피아를 조사하면 자동으로 접선돼서 마피아 채팅에 합류해요.' },
+  traitor:    { name:'배신자', icon:'🐍', team:'mafia',   max:1, desc:'마피아 팀이지만 능력은 없어요. 나는 마피아가 누군지 알지만 마피아는 나를 몰라요. 경찰 조사에선 시민으로 나와요.', how:'누를 버튼은 없어요. 🃏 카드에서 마피아가 누군지 확인하고, 낮 토론에서 시민인 척하며 마피아를 감싸주세요.' },
+  doctor:     { name:'의사',   icon:'💉', team:'special', max:1, desc:'밤마다 한 명을 치료해요. 마피아가 그 사람을 노리면 살려내요. 자신도 치료할 수 있어요.', how:'밤에 참가자 옆 [치료] 버튼을 누르세요(나도 가능). 마피아가 그 사람을 지목했다면 살아나요. 밤이 끝나기 전까지 바꿀 수 있어요.' },
+  police:     { name:'경찰',   icon:'🔍', team:'special', max:1, desc:'밤마다 한 명을 조사해 마피아인지 바로 알아내요. (스파이·배신자는 마피아로 나오지 않아요)', how:'밤에 참가자 옆 [조사] 버튼을 누르세요(하룻밤 1번). 마피아인지 아닌지 바로 귓속말로 알려줘요.' },
+  soldier:    { name:'군인',   icon:'🪖', team:'special', max:1, desc:'마피아의 공격을 한 번 버텨낼 수 있어요.', how:'누를 버튼은 없어요. 마피아에게 처음 공격당하면 자동으로 버텨내요(두 번째는 못 버텨요).' },
+  politician: { name:'정치인', icon:'🎩', team:'special', max:1, desc:'투표로 처형되지 않고, 내 투표는 2표로 계산돼요.', how:'누를 버튼은 없어요. 투표할 때 자동으로 2표가 되고, 최다 득표를 받아도 처형되지 않아요(대신 정체가 드러나요).' },
+  medium:     { name:'영매',   icon:'🔮', team:'special', max:1, desc:'죽은 사람들의 대화를 항상 볼 수 있고, 밤에는 그들과 대화할 수 있어요.', how:'밤에 채팅을 치면 죽은 사람들에게만 전달돼요. 죽은 사람들의 대화는 낮이든 밤이든 항상 보여요.' },
+  reporter:   { name:'기자',   icon:'📰', team:'special', max:1, desc:'게임 중 한 번, 밤에 한 명을 취재해 다음 날 아침 그 사람의 직업을 모두에게 공개해요. 그날 밤 기자가 죽으면 무산돼요.', how:'밤에 참가자 옆 [취재] 버튼을 누르세요(게임 전체에서 1번). 다음 날 아침 그 사람의 직업이 모두에게 공개돼요. 그날 밤 내가 죽으면 무산돼요.' },
+  gangster:   { name:'건달',   icon:'👊', team:'special', max:1, desc:'밤마다 한 명을 협박해 다음 투표에서 투표하지 못하게 해요.', how:'밤에 참가자 옆 [협박] 버튼을 누르세요(매일 밤 가능). 협박당한 사람은 다음 투표 때 투표 버튼이 사라져서 투표를 못 해요.' },
+  lover:      { name:'연인',   icon:'💞', team:'special', max:2, step:2, desc:'2명이 한 쌍. 서로가 연인인 걸 알고 밤에 둘만 비밀 대화를 할 수 있어요. 한 명이 죽으면 남은 연인도 슬픔에 따라 죽어요.', how:'누를 버튼은 없어요. 🃏 카드에서 내 연인을 확인하고, 밤에 채팅을 치면 연인에게만 보여요. 한 명이 죽으면 남은 연인도 함께 죽어요.' },
+  citizen:    { name:'시민',   icon:'👤', team:'citizen', max:99, desc:'특별한 능력은 없어요. 토론과 투표로 마피아를 찾아내세요!', how:'누를 버튼은 없어요. 낮 토론에서 의심 가는 사람을 찾고, 투표 시간에 [투표]하세요.' }
 };
 const ROLE_ORDER = ['mafia','spy','traitor','doctor','police','soldier','politician','medium','reporter','gangster','lover'];
 const emptyRoles = () => Object.fromEntries(ROLE_ORDER.map(r => [r, 0]));
@@ -327,6 +431,40 @@ function compoText(cfg, n){
   return parts.join(' · ');
 }
 
+/* ================= 루미큐브 공통 규칙 ================= */
+// 타일 번호 0~103: 4색 × 1~13 × 2벌, 104·105: 조커
+const RK_COLOR = ['검정','빨강','파랑','주황'];
+const tileOf = id => id >= 104 ? { j:true } : { c: Math.floor((id % 52) / 13), n: id % 13 + 1 };
+const tileVal = id => id >= 104 ? 30 : tileOf(id).n;
+function setInfo(ids){
+  const n = ids.length;
+  const ts = ids.map(id => ({ id, ...tileOf(id) }));
+  const jk = ts.filter(t => t.j), nm = ts.filter(t => !t.j);
+  const fallback = [...nm.sort((a, b) => a.c - b.c || a.n - b.n), ...jk].map(t => t.id);
+  if (n < 3 || !nm.length) return { ok:false, order: fallback };
+  if (n <= 4 && nm.every(t => t.n === nm[0].n) && new Set(nm.map(t => t.c)).size === nm.length)
+    return { ok:true, kind:'group', order: [...nm.sort((a, b) => a.c - b.c), ...jk].map(t => t.id), value: nm[0].n * n };
+  if (nm.every(t => t.c === nm[0].c) && n <= 13) {
+    const sorted = nm.slice().sort((a, b) => a.n - b.n);
+    if (new Set(sorted.map(t => t.n)).size === sorted.length) {
+      const lo = sorted[0].n, hi = sorted[sorted.length - 1].n, span = hi - lo + 1;
+      if (n >= span) {
+        const extra = n - span, up = Math.min(extra, 13 - hi), st = lo - (extra - up);
+        if (st >= 1) {
+          const byN = Object.fromEntries(sorted.map(t => [t.n, t.id])), jq = jk.map(t => t.id), order = [];
+          for (let v = st; v < st + n; v++) order.push(byN[v] !== undefined ? byN[v] : jq.shift());
+          return { ok:true, kind:'run', order, value: n * st + n * (n - 1) / 2 };
+        }
+      }
+    }
+  }
+  return { ok:false, order: fallback };
+}
+function tileHTML(id, cls = ''){
+  const t = tileOf(id);
+  return t.j ? `<div class="tile jk ${cls}" data-tid="${id}">★</div>` : `<div class="tile c${t.c} ${cls}" data-tid="${id}">${t.n}</div>`;
+}
+
 const $ = s => document.querySelector(s);
 const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function hue(name){ let h = 0; for (const ch of String(name)) h = (h * 31 + ch.charCodeAt(0)) % 360; return h; }
@@ -345,7 +483,7 @@ const BROKERS = qsBroker ? qsBroker.split(',') : [
   'wss://test.mosquitto.org:8081/mqtt'
 ];
 const brokerName = u => { try { return new URL(u).hostname.split('.').slice(-2, -1)[0] || u; } catch(e) { return u; } };
-const T = s => 'mafiakr/v5/' + roomCode + s;
+const T = s => 'mafiakr/v6/' + roomCode + s;
 function newId(){ const c = 'abcdefghijklmnopqrstuvwxyz0123456789'; let s = ''; for (let i=0;i<12;i++) s += c[Math.floor(Math.random()*c.length)]; return s; }
 myId = (() => { try { let v = sessionStorage.getItem('mafia_id'); if (!v) { v = newId(); sessionStorage.setItem('mafia_id', v); } return v; } catch(e) { return newId(); } })();
 
@@ -376,13 +514,24 @@ function onMq(c, topic, buf){
   if (!isHost && mq && c !== mq) return;
   let d; try { d = JSON.parse(buf.toString()); } catch(e) { return; }
   if (!d) return;
-  if (isHost) { if (topic === T('/host') && d.from && d.m) hostHandle(String(d.from), d.m); return; }
+  if (isHost) {
+    if (topic === T('/host') && d.from && d.m) {
+      const from = String(d.from);
+      if (d.m.type !== 'bye') route[from] = { c, sure: d.m.type !== 'join' };
+      hostHandle(from, d.m);
+    }
+    return;
+  }
   if (topic === T('/all')) { if (d.type === 'hostgone' && S) sysLine('⚠️ 방장의 연결이 끊어졌어요. 방장이 다시 연결되면 이어서 진행돼요.', true); return; }
   if (topic === T('/to/' + myId) || topic === T('/pub')) {
-    if (!mq) { if (d.type === 'welcome') mq = c; else if (!(d.type === 'error' && d.fatal)) return; }
+    if (!mq) {
+      if (d.type === 'welcome') { mq = c; pubOn(c, T('/host'), { from: myId, m: { type:'ping' } }); }   // 쓰는 서버를 방장에게 알려줌
+      else if (!(d.type === 'error' && d.fatal)) return;
+    }
     recv(d);
   }
 }
+const route = {};   // 참가자별로 실제 쓰는 서버. 그 서버로만 보내서 트래픽을 줄여요(렉 감소).
 function addHostLink(c){
   links.push(c);
   c.on('message', (t, b) => onMq(c, t, b));
@@ -392,7 +541,7 @@ function addHostLink(c){
 }
 function watchConnection(){
   mq.on('offline', () => { if (!leaving && S) sysLine('⚠️ 인터넷 연결이 끊어졌어요. 다시 연결하는 중...', true); });
-  mq.on('connect', () => { if (leaving) return; if (S) sysLine('✅ 다시 연결됐어요.'); send({ type:'join', name: myName }); });
+  mq.on('connect', () => { if (leaving) return; if (S) sysLine('✅ 다시 연결됐어요.'); send({ type:'join', name: myName }); setTimeout(() => send({ type:'ping' }), 300); });
 }
 setInterval(() => { if (!isHost && mq && S && !leaving) send({ type:'ping' }); }, 5000);
 setInterval(() => {
@@ -402,12 +551,19 @@ setInterval(() => {
 }, 1000);
 
 /* ================= 시작 화면 ================= */
-const qsRoom = new URLSearchParams(location.search).get('room');
-if (qsRoom) $('#joinCode').value = qsRoom.toUpperCase();
+const qsRoom = (new URLSearchParams(location.search).get('room') || '').toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 5);
+if (qsRoom.length === 5) {     // 초대 링크로 들어온 경우: 닉네임만 넣고 바로 입장
+  $('#joinCode').value = qsRoom;
+  $('#inviteCode').textContent = qsRoom;
+  $('#inviteBox').classList.remove('hidden');
+  $('#btnInviteJoin').classList.remove('hidden');
+  $('#createJoinBox').classList.add('hidden');
+  $('#btnInviteJoin').onclick = () => $('#btnJoin').click();
+}
 try { $('#nick').value = localStorage.getItem('mafia_nick') || ''; } catch(e){}
 function homeErr(t){ $('#homeErr').textContent = t || ''; }
 function homeStatus(t){ $('#homeStatus').textContent = t || ''; }
-function setHomeBusy(b){ $('#btnCreate').disabled = b; $('#btnJoin').disabled = b; }
+function setHomeBusy(b){ $('#btnCreate').disabled = b; $('#btnJoin').disabled = b; $('#btnInviteJoin').disabled = b; }
 function readNick(){
   const n = $('#nick').value.trim().slice(0,10);
   if (!n) { homeErr('닉네임을 입력해 주세요.'); $('#nick').focus(); return null; }
@@ -481,10 +637,53 @@ function enterRoom(){
   $('#code').textContent = roomCode;
   $('#log').innerHTML = '';
 }
-$('#btnCopy').onclick = () => {
-  (navigator.clipboard ? navigator.clipboard.writeText(roomCode) : Promise.reject()).then(
-    () => sysLine('방 코드를 복사했어요.'), () => sysLine('방 코드: ' + roomCode));
+function inviteLink(){ return location.origin + location.pathname + '?room=' + roomCode; }
+$('#btnInvite').onclick = () => {
+  const web = /^https?:/.test(location.protocol);
+  const link = inviteLink();
+  const copy = t => (navigator.clipboard ? navigator.clipboard.writeText(t) : Promise.reject());
+  openModal(`<h2>🔗 친구 초대</h2>
+    ${web ? `<p style="color:var(--muted);font-size:14px">이 링크를 보내면 친구는 닉네임만 넣고 바로 들어와요.</p>
+      <input readonly value="${esc(link)}" id="invLink" style="font-size:13px">
+      <button id="invCopy" style="width:100%;margin-top:10px">링크 복사</button>`
+    : `<p style="font-size:14px;line-height:1.6">지금은 <b>파일로 열어서</b> 링크 초대가 안 돼요.<br>
+      게임 파일을 인터넷 주소로 올리면(예: app.netlify.com/drop 에 파일 끌어다 놓기) 그 주소에서 초대 링크를 쓸 수 있어요.</p>`}
+    <div style="margin-top:16px;font-size:14px">방 코드: <b style="letter-spacing:3px;color:var(--accent);font-size:20px">${roomCode}</b></div>
+    <button class="ghost" id="codeCopy" style="width:100%;margin-top:8px">방 코드 복사</button>
+    <button class="ghost" data-close style="width:100%;margin-top:8px">닫기</button>`);
+  if (web) $('#invCopy').onclick = () => copy(link).then(() => { $('#invCopy').textContent = '복사했어요 ✓'; }, () => { $('#invLink').select(); });
+  $('#codeCopy').onclick = () => copy(roomCode).then(() => { $('#codeCopy').textContent = '복사했어요 ✓'; }, () => {});
 };
+function openModal(html){
+  const m = $('#modal'); m.innerHTML = `<div class="mbox">${html}</div>`; m.classList.remove('hidden');
+  m.querySelectorAll('[data-close]').forEach(b => b.onclick = () => m.classList.add('hidden'));
+}
+$('#modal').addEventListener('click', e => { if (e.target.id === 'modal') e.target.classList.add('hidden'); });
+
+// 닉네임 바꾸기
+$('#btnRename').onclick = () => {
+  openModal(`<h2>✏️ 닉네임 바꾸기</h2>
+    <input id="newNick" maxlength="10" value="${esc(myName)}" autocomplete="off">
+    <div class="row" style="margin-top:10px"><button class="ghost" data-close style="flex:1">취소</button><button id="nickOk" style="flex:1">바꾸기</button></div>`);
+  const inp = $('#newNick'); inp.focus(); inp.select();
+  const ok = () => { const v = inp.value.trim().slice(0, 10); if (v && v !== myName) send({ type:'rename', name: v }); $('#modal').classList.add('hidden'); };
+  $('#nickOk').onclick = ok;
+  inp.addEventListener('keydown', e => { if (e.key === 'Enter') ok(); });
+};
+
+// 역할 설명
+function openGuide(){
+  const cfg = S && S.config && S.config.roles;
+  openModal(`<h2>📖 역할 설명</h2>
+    <div style="font-size:13px;color:var(--muted);margin-bottom:6px">능력 버튼은 모두 👥 참가자 목록에서 상대 이름 옆에 나타나요. (휴대폰은 위쪽 👥 참가자 버튼을 눌러 펼치기)</div>
+    ${[...ROLE_ORDER, 'citizen'].map(r => `<div class="guide-row"><div class="gi">${ROLE[r].icon}</div><div>
+      <b>${ROLE[r].name}</b> <span class="badge t-${ROLE[r].team}">${ROLE[r].team === 'mafia' ? '마피아 팀' : '시민 팀'}</span>
+      ${cfg && r !== 'citizen' && cfg[r] ? '<span class="badge me">이번 판 포함</span>' : ''}
+      <div class="gd">${ROLE[r].desc}</div><div class="gh">${ROLE[r].how}</div></div></div>`).join('')}
+    <div class="guide-row"><div class="gi">🗳️</div><div><b>투표</b><div class="gh">투표 시간에 참가자 옆 [투표] 버튼, 또는 맨 위 [투표 안 함(기권)]. 다시 누르면 취소돼요. 모두 투표하면 바로 마감!</div></div></div>
+    <button data-close style="width:100%;margin-top:14px">닫기</button>`);
+}
+$('#btnGuide').onclick = openGuide;
 $('#btnLeave').onclick = () => {
   if (S && !['lobby','end'].includes(S.phase) && !confirm('게임 중에 나가면 사망 처리돼요. 나갈까요?')) return;
   if (isHost && !confirm('방장이 나가면 방이 사라져요. 나갈까요?')) return;
@@ -591,6 +790,7 @@ function recv(m){
     }
     case 'chat': addChat(m); break;
     case 'mc': addMC(m.text, m.private); break;
+    case 'renamed': myName = m.name; try { localStorage.setItem('mafia_nick', m.name); } catch(e){} break;
     case 'error':
       if (m.fatal && !S) { if (joinWaiter) joinWaiter('fatal'); setHomeBusy(false); homeStatus(); homeErr(m.text); }
       else sysLine(m.text, true);
@@ -599,20 +799,25 @@ function recv(m){
 }
 
 /* ================= 채팅 표시 ================= */
-let lastKey = null, lastTs = 0;
+let lastKey = null, lastTs = 0, replyTo = null;
+const msgMeta = {};
+function newMid(){ return Math.random().toString(36).slice(2, 10); }
 function timeStr(ts){ const d = new Date(ts || Date.now()); let h = d.getHours(); const ap = h < 12 ? '오전' : '오후'; h = h % 12 || 12; return `${ap} ${h}:${String(d.getMinutes()).padStart(2,'0')}`; }
 function addChat(m){
   const key = m.fromId + '|' + m.ch, now = m.ts || Date.now();
   const cont = key === lastKey && now - lastTs < 60000;
   lastKey = key; lastTs = now;
   const mine = m.fromId === myId;
+  if (m.mid) msgMeta[m.mid] = { from: m.from, text: m.text || (m.img ? '📷 사진' : '') };
   const tag = m.ch === 'mafia' ? '마피아' : m.ch === 'lover' ? '연인' : m.ch === 'dead' ? (m.medium ? '영매' : '사망자') : '';
   const div = document.createElement('div');
   div.className = `m ch-${m.ch}${mine ? ' mine' : ''}${cont ? ' cont' : ''}`;
+  if (m.mid) div.dataset.mid = m.mid;
+  const rq = m.reply ? `<div class="rq" data-goto="${esc(m.reply.mid)}">↩ <b>${esc(m.reply.from)}</b> ${esc(m.reply.text)}</div>` : '';
   div.innerHTML = `${avatar(m.from)}<div class="body">
       ${cont ? '' : `<div class="nm">${esc(m.from)}${tag ? `<span class="chtag">[${tag}]</span>` : ''}</div>`}
-      <div class="bub">${m.img ? `<img src="${m.img}" alt="사진">` : ''}<span>${esc(m.text || '')}</span></div>
-    </div><div class="time">${timeStr(now)}</div>`;
+      <div class="bub">${rq}${m.img ? `<img src="${m.img}" alt="사진">` : ''}<span>${esc(m.text || '')}</span></div>
+    </div><div class="time">${m.mid ? `<button class="rbtn" data-reply="${esc(m.mid)}" title="답장">↩</button>` : ''}${timeStr(now)}</div>`;
   if (mine && tag) div.querySelector('.bub').insertAdjacentHTML('afterbegin', `<span class="chtag" style="margin:0 0 2px;display:block">[${tag}]</span>`);
   pushLog(div);
 }
@@ -635,11 +840,29 @@ function pushLog(div){
   const go = () => { log.scrollTop = log.scrollHeight; };
   if (atBottom || div.classList.contains('mine')) { go(); div.querySelectorAll('img').forEach(i => i.addEventListener('load', go)); }
 }
+function chatPayload(extra){
+  const m = { type:'chat', mid: newMid(), ...extra };
+  if (replyTo) m.reply = replyTo;
+  setReply(null);
+  return m;
+}
+function setReply(r){
+  replyTo = r;
+  $('#replyBar').classList.toggle('hidden', !r);
+  if (r) { $('#replyBar span').textContent = `↩ ${r.from}에게 답장: ${r.text}`; $('#chatInput').focus(); }
+}
+$('#replyX').onclick = () => setReply(null);
 $('#chatForm').addEventListener('submit', e => {
   e.preventDefault();
   const t = $('#chatInput').value.trim(); if (!t) return;
-  send({ type:'chat', text: t });
+  send(chatPayload({ text: t }));
   $('#chatInput').value = '';
+});
+$('#log').addEventListener('click', e => {
+  const rb = e.target.closest('[data-reply]');
+  if (rb) { const mm = msgMeta[rb.dataset.reply]; if (mm) setReply({ mid: rb.dataset.reply, from: mm.from, text: mm.text.slice(0, 50) }); return; }
+  const g = e.target.closest('[data-goto]');
+  if (g) { const el = document.querySelector(`.m[data-mid="${CSS.escape(g.dataset.goto)}"]`); if (el) { el.scrollIntoView({ block:'center' }); el.classList.remove('flash'); void el.offsetWidth; el.classList.add('flash'); } }
 });
 $('#log').addEventListener('click', e => {
   const img = e.target.closest('.bub img'); if (!img) return;
@@ -658,7 +881,7 @@ async function sendImageFile(f){
   if ($('#chatInput').disabled) { sysLine('지금은 채팅을 보낼 수 없어요.', true); return true; }
   try {
     const url = await shrinkImage(f);
-    send({ type:'chat', text: $('#chatInput').value.trim(), img: url });
+    send(chatPayload({ text: $('#chatInput').value.trim(), img: url }));
     $('#chatInput').value = '';
   } catch(err) { sysLine('사진을 불러오지 못했어요.', true); }
   return true;
@@ -711,25 +934,24 @@ function mateInfo(s){
   const label = s.myRole === 'traitor' ? '도와줄 마피아' : s.myRole === 'lover' ? '나의 연인' : '동료';
   return mates.length ? `${label}: ${mates.join(', ')}` : '';
 }
-function openCard(autoFlip){
+function openCard(){
   if (!S || !S.myRole) return;
   const r = ROLE[S.myRole], mi = mateInfo(S);
   const ov = $('#cardOverlay');
-  ov.innerHTML = `<div class="cardWrap">
-      <div class="flip" id="flip"><div class="flip-in">
-        <div class="face back"><div class="q">?</div><div class="tap">눌러서 확인</div></div>
-        <div class="face front ${r.team === 'mafia' ? 't-mafia' : ''}"><div class="ic">${r.icon}</div><div class="nm">${r.name}</div>
-          <div class="ds">${r.desc}</div>${mi ? `<div class="mt">${esc(mi)}</div>` : ''}${S.alive ? '' : '<div class="mt">☠️ 사망</div>'}</div>
-      </div></div>
+  const front = `<div class="rcard front ${r.team === 'mafia' ? 't-mafia' : ''}" id="rcard"><div class="ic">${r.icon}</div><div class="nm">${r.name}</div>
+      <div class="ds">${r.desc}</div><div class="how">👉 ${r.how}</div>${mi ? `<div class="mt">${esc(mi)}</div>` : ''}${S.alive ? '' : '<div class="mt">☠️ 사망</div>'}</div>`;
+  const back = `<div class="rcard back" id="rcard"><div class="q">?</div><div class="tap">눌러서 내 직업 보기</div></div>`;
+  ov.innerHTML = `<div class="cardWrap"><div id="rcardSlot">${back}</div>
       <div class="tip">다른 사람이 보지 않게 조심하세요</div>
-      <button class="ghost" id="cardClose">카드 덮기</button>
-    </div>`;
+      <div class="row"><button class="ghost" id="cardGuide">📖 전체 역할 설명</button><button id="cardClose">카드 덮기</button></div></div>`;
   ov.classList.remove('hidden');
-  $('#flip').onclick = () => { $('#flip').classList.toggle('open'); if ($('#flip').classList.contains('open')) Music.sfx('bell'); };
+  let open = false;
+  $('#rcardSlot').onclick = () => { open = !open; $('#rcardSlot').innerHTML = open ? front : back; if (open) Music.sfx('bell'); };
   $('#cardClose').onclick = () => ov.classList.add('hidden');
-  if (autoFlip) setTimeout(() => $('#flip') && $('#flip').classList.add('open'), 50);
+  $('#cardGuide').onclick = () => { ov.classList.add('hidden'); openGuide(); };
 }
-$('#btnCard').onclick = () => openCard(false);
+$('#btnCard').onclick = () => openCard();
+document.addEventListener('click', e => { if (e.target.closest('#myCardBtn')) openCard(); });
 $('#cardOverlay').addEventListener('click', e => { if (e.target.id === 'cardOverlay') e.target.classList.add('hidden'); });
 
 let fxTimer = null;
@@ -741,6 +963,13 @@ function phaseFx(text, sub){
 }
 function effects(prev, s){
   const ph = s.phase, pph = prev && prev.phase;
+  if (s.game === 'rummikub') {
+    Music.setMode('calm');
+    if (ph === 'lobby' && pph !== 'lobby') $('#resultOverlay').classList.add('hidden');
+    if (ph === 'rk' && s.rk && (!prev || !prev.rk || prev.rk.turnNo !== s.rk.turnNo) && s.rk.cur === s.me) { phaseFx('🀄 내 차례!', '타일을 내거나 한 장 뽑으세요'); Music.sfx('bell'); }
+    if (ph === 'end' && pph !== 'end') showRKResult(s);
+    return;
+  }
   Music.setMode(ph === 'vote' ? 'tense' : ph === 'night' ? 'night' : 'calm');
   if (ph !== pph && isMobile()) {
     const actRoles = ['mafia','doctor','police','spy','reporter','gangster','lover'];
@@ -754,7 +983,7 @@ function effects(prev, s){
     if (ph === 'lobby') $('#resultOverlay').classList.add('hidden');
     if (ph === 'end') showResult(s);
   }
-  if (prev && prev.myRole === null && s.myRole) setTimeout(() => openCard(false), pph === 'lobby' ? 300 : 0);   // 게임 시작: 카드 뒤집어 확인
+  if (prev && prev.myRole === null && s.myRole) setTimeout(() => openCard(), pph === 'lobby' ? 300 : 0);   // 게임 시작: 카드 뒤집어 확인
   if (prev && prev.players) {
     const was = Object.fromEntries(prev.players.map(p => [p.id, p.alive]));
     if (s.players.some(p => was[p.id] && !p.alive)) Music.sfx('gong');
@@ -798,7 +1027,13 @@ function renderToggle(s){
   const alive = s.players.filter(p => p.alive).length, n = s.players.length;
   const actRoles = ['mafia','doctor','police','spy','reporter','gangster'];
   let cue = '';
-  if (s.phase === 'lobby') cue = isHost ? '⚙️ 설정 · 게임 시작' : '⚙️ 역할 구성 보기';
+  if (s.game === 'rummikub' && s.phase !== 'lobby') {
+    const open = $('#main').classList.contains('sheetOpen');
+    $('#sideToggle').innerHTML = `<span>👥 참가자 · 남은 타일 수${s.phase === 'end' && isHost ? ' · 🔁 다시 하기' : ''}</span><span>${open ? '닫기 ▴' : '열기 ▾'}</span>`;
+    $('#sideToggle').classList.remove('cue');
+    return;
+  }
+  if (s.phase === 'lobby') cue = isHost ? '⚙️ 게임·설정 · 시작' : '⚙️ 게임 설정 보기';
   else if (s.phase === 'vote' && s.alive && !s.blockedMe) cue = s.myVote ? '🗳️ 투표 완료' : '🗳️ 투표하기';
   else if (s.phase === 'night' && s.alive && actRoles.includes(s.myRole) && !(s.myRole === 'reporter' && s.myUsed && !s.myAction)) cue = s.myAction ? '🌙 선택 완료' : '🌙 능력 사용하기';
   else if (s.phase === 'end') cue = isHost ? '🔁 다시 하기' : '';
@@ -808,9 +1043,165 @@ function renderToggle(s){
   t.classList.toggle('cue', !open && /하기|사용하기/.test(cue));
 }
 
+/* ================= 루미큐브 화면 ================= */
+let W = null, wTurn = -1, sel = new Set(), rackSort = 'num', draftT = null;
+try { rackSort = localStorage.getItem('rk_sort') || 'num'; } catch(e){}
+function rkMine(s){ return s.phase === 'rk' && s.rk && s.rk.cur === s.me; }
+function rkSync(s){
+  if (!s.rk || !rkMine(s)) { W = null; wTurn = -1; sel.clear(); return; }
+  if (!W || wTurn !== s.rk.turnNo || !W.dirty) {
+    W = { table: s.rk.table.map(a => a.slice()), rack: s.rk.rack.slice(), rack0: new Set(s.rk.rack) };
+    if (wTurn !== s.rk.turnNo) sel.clear();
+    wTurn = s.rk.turnNo;
+  }
+}
+function sortRack(ids){
+  const k = id => { const t = tileOf(id); return t.j ? [9, 99] : rackSort === 'num' ? [t.n, t.c] : [t.c, t.n]; };
+  return ids.slice().sort((a, b) => { const x = k(a), y = k(b); return x[0] - y[0] || x[1] - y[1] || a - b; });
+}
+function rkSendDraft(){ clearTimeout(draftT); draftT = setTimeout(() => { if (W) send({ type:'rk_draft', table: W.table }); }, 120); }
+function rkMove(target){       // target: 세트 번호, 'new', 'rack'
+  if (!W || !sel.size) return;
+  let ids = [...sel];
+  if (target === 'rack') {
+    const back = ids.filter(id => W.rack0.has(id) && !W.rack.includes(id));
+    if (back.length < ids.filter(id => !W.rack.includes(id)).length) rkFlash('원래 테이블에 있던 타일은 내 패로 가져올 수 없어요.', true);
+    ids = back;
+    if (!ids.length) { sel.clear(); return renderRK(S); }
+  }
+  const dest = typeof target === 'number' ? W.table[target] : null;
+  W.table.forEach(set => { for (let i = set.length - 1; i >= 0; i--) if (ids.includes(set[i])) set.splice(i, 1); });
+  W.rack = W.rack.filter(id => !ids.includes(id));
+  if (target === 'rack') W.rack.push(...ids);
+  else if (target === 'new') W.table.push(ids);
+  else dest.push(...ids);
+  W.table = W.table.filter(a => a.length).map(a => setInfo(a).order);
+  W.dirty = true;
+  sel.clear(); rkSendDraft(); renderRK(S);
+}
+let flashT = null;
+function rkFlash(t, bad){ const el = $('#rkMsg'); el.textContent = t; el.className = 'rkmsg' + (bad ? ' bad' : ''); clearTimeout(flashT); flashT = setTimeout(() => { el.textContent = ''; }, 3500); }
+function rkCheck(){             // 내 차례 진행 상황 점검 (방장도 같은 규칙으로 다시 검사해요)
+  const played = W.table.flat().filter(id => W.rack0.has(id));
+  const bad = W.table.filter(a => !setInfo(a).ok).length;
+  const melded = S.rk.melded[S.me];
+  let meld = 0;
+  if (!melded) W.table.forEach(a => { if (a.some(id => W.rack0.has(id))) { const i = setInfo(a); if (i.ok) meld += i.value; } });
+  let why = '';
+  if (!played.length) why = '타일을 1장 이상 내려놓아야 해요';
+  else if (bad) why = `올바르지 않은 세트가 ${bad}개 있어요`;
+  else if (!melded && meld < 30) why = `첫 등록은 30점 이상 (지금 ${meld}점)`;
+  return { played, bad, meld, melded, why };
+}
+function renderRK(s){
+  const rk = s.rk; if (!rk) return;
+  rkSync(s);
+  const mine = rkMine(s);
+  const name = id => (s.players.find(p => p.id === id) || {}).name || '?';
+  const table = W ? W.table : (rk.draft || rk.table);
+  const rack = W ? W.rack : rk.rack;
+  $('#rkTurn').textContent = s.phase === 'end' ? '🏁 게임 종료' : mine ? '🀄 내 차례!' : `⏳ ${name(rk.cur)}님 차례${rk.draft ? ' · 배치 중...' : ''}`;
+  $('#rkTurn').className = 'turn' + (mine ? ' mine' : '');
+  $('#rkPool').textContent = `남은 타일 더미 ${rk.pool}장`;
+  // 테이블
+  const canDrop = mine && sel.size;
+  let bh = table.map((set, i) => {
+    const info = setInfo(set);
+    return `<div class="rkset ${info.ok ? '' : 'bad'}" data-set="${i}">${set.map(id => tileHTML(id, (sel.has(id) ? 'sel ' : '') + (W && W.rack0.has(id) ? 'fresh' : ''))).join('')}${canDrop ? `<div class="slot" data-drop="${i}">＋</div>` : ''}</div>`;
+  }).join('');
+  if (canDrop) bh += `<div class="newset" data-drop="new">＋ 새 세트 만들기</div>`;
+  if (!table.length && !canDrop) bh = `<div class="empty">${mine ? '내 타일을 눌러 고른 뒤, ＋ 새 세트 만들기를 누르세요' : '아직 테이블에 타일이 없어요'}</div>`;
+  $('#rkBoard').innerHTML = bh;
+  // 내 패
+  const backable = mine && [...sel].some(id => W.rack0.has(id) && !W.rack.includes(id));
+  $('#rkRack').innerHTML = sortRack(rack).map(id => tileHTML(id, sel.has(id) ? 'sel' : '')).join('') + (backable ? `<div class="slot" data-drop="rack" title="내 패로 돌려놓기">↩</div>` : '');
+  $('#rkCount').textContent = rack.length + '장';
+  $('#sortNum').classList.toggle('on', rackSort === 'num'); $('#sortCol').classList.toggle('on', rackSort === 'col');
+  // 버튼
+  let act = '';
+  if (mine) {
+    const c = rkCheck();
+    $('#rkMeld').textContent = c.melded ? '등록 완료 ✓' : `첫 등록 점수 ${c.meld}/30`;
+    act = `<button class="ghost" data-rk="reset">↩️ 되돌리기</button>
+      <button data-rk="commit" ${c.why ? 'disabled' : ''} title="${esc(c.why)}">✅ 턴 완료</button>
+      <button class="ghost" data-rk="draw">${rk.pool ? '🀫 뽑고 넘기기' : '⏭️ 패스'}</button>`;
+    if (c.why && c.played.length) act += `<div style="width:100%;font-size:12.5px;color:#ff8f8a">${esc(c.why)}</div>`;
+    else if (!c.played.length) act += `<div style="width:100%;font-size:12.5px;color:var(--muted)">타일을 눌러 고르고(여러 장 가능), 테이블의 ＋ 를 눌러 놓으세요.</div>`;
+  } else {
+    $('#rkMeld').textContent = rk.melded[s.me] ? '등록 완료 ✓' : '첫 등록 전 (30점 필요)';
+    act = s.phase === 'end' ? '' : `<div style="font-size:13px;color:var(--muted)">기다리는 동안 내 타일 정렬을 바꾸거나 채팅할 수 있어요.</div>`;
+  }
+  $('#rkActions').innerHTML = act;
+}
+$('#rkArea').addEventListener('click', e => {
+  const b = e.target.closest('[data-rk]');
+  if (b && !b.disabled) {
+    const a = b.dataset.rk;
+    if (a === 'sortnum' || a === 'sortcol') { rackSort = a === 'sortnum' ? 'num' : 'col'; try { localStorage.setItem('rk_sort', rackSort); } catch(_){} return renderRK(S); }
+    if (!W) return;
+    if (a === 'reset') { W = null; wTurn = -1; sel.clear(); send({ type:'rk_draft', table: null }); return renderRK(S); }
+    if (a === 'commit') { send({ type:'rk_commit', table: W.table }); return; }
+    if (a === 'draw') { send({ type:'rk_draw' }); return; }
+  }
+  const d = e.target.closest('[data-drop]');
+  if (d) { const v = d.dataset.drop; return rkMove(v === 'new' || v === 'rack' ? v : Number(v)); }
+  const t = e.target.closest('.tile');
+  if (t && W) {
+    const id = Number(t.dataset.tid);
+    if (!W.rack.includes(id) && !W.table.flat().includes(id)) return;
+    sel.has(id) ? sel.delete(id) : sel.add(id);
+    return renderRK(S);
+  }
+});
+function showRKResult(s){
+  const rk = s.rk; if (!rk || !rk.scores) return;
+  const win = s.winner === s.me;
+  Music.sfx(win ? 'win' : 'lose');
+  const ov = $('#resultOverlay');
+  const rows = rk.scores.slice().sort((a, b) => b.score - a.score);
+  ov.innerHTML = `<div class="result"><h2>🏆 ${esc((s.players.find(p => p.id === s.winner) || {}).name || '?')} 승리!</h2>
+    <div style="color:var(--muted)">${win ? '축하해요! 당신이 이겼어요!' : '남은 타일 점수만큼 감점돼요.'}</div>
+    <ul>${rows.map(r => `<li>${avatar(r.name)}<span style="flex:1">${esc(r.name)}${r.id === s.winner ? ' 👑' : ''}</span>
+      <span class="badge">남은 ${r.left}장</span><b style="min-width:52px;text-align:right;color:${r.score >= 0 ? 'var(--green)' : 'var(--red)'}">${r.score > 0 ? '+' : ''}${r.score}</b></li>`).join('')}</ul>
+    <button id="resClose">닫기</button></div>`;
+  ov.classList.remove('hidden');
+  $('#resClose').onclick = () => ov.classList.add('hidden');
+}
+function renderRKPage(s){
+  document.body.className = 'ph-rk';
+  $('#code').textContent = s.code;
+  $('#phase').textContent = s.phase === 'end' ? '🏁 게임 종료' : '🀄 루미큐브';
+  const wasRk = $('#main').classList.contains('rk');
+  $('#main').classList.remove('lobby'); $('#main').classList.add('rk');
+  if (!wasRk) setTimeout(() => { const l = $('#log'); l.scrollTop = l.scrollHeight; }, 50);   // 화면 배치가 바뀌면 채팅을 맨 아래로
+  $('#configSide').classList.add('hidden');
+  $('#btnCard').classList.add('hidden');
+  const rk = s.rk;
+  const mine = rkMine(s);
+  $('#hint').textContent = s.phase === 'end' ? '게임이 끝났어요.' : mine ? '내 차례예요! 시간 안에 타일을 내거나 뽑으세요.' : '다른 사람 차례예요.';
+  $('#skipBox').innerHTML = '';
+  $('#players').innerHTML = (rk ? rk.order : []).map(id => {
+    const q = s.players.find(p => p.id === id) || { id, name:'(나감)', online:false };
+    const tags = [];
+    if (id === s.me) tags.push('<span class="badge me">나</span>');
+    if (rk.melded[id]) tags.push('<span class="badge t-special">등록</span>');
+    if (!q.online) tags.push('<span class="badge">나감</span>');
+    return `<li class="${id === rk.cur && s.phase === 'rk' ? 'turn' : ''}">${avatar(q.name)}<span class="pname">${id === rk.cur && s.phase === 'rk' ? '▶ ' : ''}${esc(q.name)}</span>${tags.join('')}<span class="cnt-badge">${rk.counts[id] ?? 0}장</span></li>`;
+  }).join('');
+  $('#hostBox').innerHTML = isHost && s.phase === 'end' ? `<button data-act="restart">대기실로 돌아가기 (다시 하기)</button>` : '';
+  $('#compo').textContent = '';
+  const cl = $('#chanLabel'); cl.textContent = '💬 전체 채팅'; cl.className = '';
+  $('#chatInput').disabled = false; $('#btnPhoto').disabled = false;
+  $('#chatInput').placeholder = isMobile() ? '메시지 입력' : '메시지 입력 (사진 붙여넣기 가능)';
+  renderRK(s);
+  renderToggle(s);
+}
+
 /* ================= 화면 그리기 ================= */
 function render(){
   const s = S; if (!s) return;
+  if (s.game === 'rummikub' && s.phase !== 'lobby') return renderRKPage(s);
+  $('#main').classList.remove('rk');
   document.body.className = 'ph-' + s.phase;
   $('#code').textContent = s.code;
   const PH = { lobby:'🏠 대기실', day:`☀️ ${s.day}일차 낮`, vote:`🗳️ ${s.day}일차 투표`, night:`🌙 ${s.day}일차 밤`, end:'🏁 게임 종료' };
@@ -821,7 +1212,7 @@ function render(){
   const n = s.players.length;
 
   // 안내
-  const err = s.phase === 'lobby' ? validate(s.config, n) : '';
+  const err = s.phase === 'lobby' ? lobbyErr(s) : '';
   let hint = '';
   if (s.phase === 'lobby') hint = isHost ? (err || '준비되면 게임을 시작하세요.') : `방장이 게임을 시작할 때까지 기다려 주세요. (${n}명 참가 중)`;
   else if (s.phase === 'end') hint = '게임이 끝났어요. 모든 직업이 공개되었어요.';
@@ -840,7 +1231,7 @@ function render(){
       lover: '연인과 둘만 비밀 대화를 나눌 수 있어요.'
     }[s.myRole] || '밤이 지나가길 기다리세요...';
   }
-  $('#hint').textContent = hint;
+  $('#hint').innerHTML = (s.myRole ? '<button id="myCardBtn">🃏 내 직업 보기</button>' : '') + esc(hint);
 
   // 기권 버튼
   $('#skipBox').innerHTML = s.phase === 'vote' && s.alive && !s.blockedMe
@@ -901,10 +1292,15 @@ function render(){
   }
   const cl = $('#chanLabel'); cl.textContent = label; cl.className = cls;
   $('#chatInput').disabled = !can; $('#btnPhoto').disabled = !can;
-  $('#chatInput').placeholder = can ? '메시지 입력 (사진 붙여넣기 가능)' : '밤에는 조용히...';
+  $('#chatInput').placeholder = can ? (isMobile() ? '메시지 입력' : '메시지 입력 (사진 붙여넣기 가능)') : '밤에는 조용히...';
   renderToggle(s);
 }
 
+function lobbyErr(s){
+  const n = s.players.length;
+  if (s.game === 'rummikub') return n < 2 ? '루미큐브는 최소 2명이 필요해요.' : n > 5 ? '루미큐브는 최대 5명까지 할 수 있어요.' : '';
+  return validate(s.config, n);
+}
 function renderConfig(s, err){
   const card = $('#configCard');
   if (s.phase !== 'lobby') return;
@@ -918,7 +1314,26 @@ function renderConfig(s, err){
   const durSel = (k, label) => isHost
     ? `<label style="display:inline;margin:0">${label} <select data-dur="${k}">${DUR_OPTS[k].map(v => `<option value="${v}" ${c.dur[k] === v ? 'selected' : ''}>${fmtSec(v)}</option>`).join('')}</select></label>`
     : `<span>${label} ${fmtSec(c.dur[k])}</span>`;
-  card.innerHTML = `<h3>⚙️ 역할 설정 ${isHost ? '' : '<small style="color:var(--muted);font-weight:400">(방장만 변경 가능)</small>'}</h3>
+  const pick = `<div class="gamepick">${[['mafia','🕵️ 마피아'],['rummikub','🀄 루미큐브']].map(([g, l]) =>
+    `<button class="ghost ${s.game === g ? 'on' : ''}" ${isHost ? `data-act="setgame" data-game="${g}"` : 'disabled'}>${l}</button>`).join('')}</div>`;
+  if (s.game === 'rummikub') {
+    const sel = isHost ? `<select data-rkturn>${[60,90,120,180].map(v => `<option value="${v}" ${c.rkTurn === v ? 'selected' : ''}>${fmtSec(v)}</option>`).join('')}</select>` : fmtSec(c.rkTurn);
+    card.innerHTML = `<h3>🎮 게임 선택 ${isHost ? '' : '<small style="color:var(--muted);font-weight:400">(방장만 변경 가능)</small>'}</h3>${pick}
+      <div class="rules" style="line-height:1.7">
+        <b>🀄 루미큐브</b> · 2~5명 · 각자 14장으로 시작<br>
+        · <b>그룹</b>: 같은 숫자, 다른 색 3~4장 (예: 빨7 파7 검7)<br>
+        · <b>런</b>: 같은 색 연속 숫자 3장 이상 (예: 파3 파4 파5)<br>
+        · ★ 조커는 아무 타일 대신 쓸 수 있어요 (남으면 −30점)<br>
+        · <b>첫 등록</b>: 내 타일로만 합계 30점 이상<br>
+        · 등록 후에는 테이블 세트를 쪼개고 붙여서 자유롭게 재배치 가능<br>
+        · 낼 게 없으면 한 장 뽑고 턴 종료. 시간 초과도 한 장 뽑아요<br>
+        · 타일을 먼저 다 내려놓은 사람이 승리!
+      </div>
+      <div class="durs">⏱️ 한 턴 시간 ${sel}</div>
+      <div id="cfgErr">${err ? esc(err) : ''}</div>`;
+    return;
+  }
+  card.innerHTML = `${pick}<h3>⚙️ 역할 설정 ${isHost ? '' : '<small style="color:var(--muted);font-weight:400">(방장만 변경 가능)</small>'}</h3>
     ${ROLE_ORDER.map(r => row(r, c.roles[r], isHost)).join('')}
     ${row('citizen', Math.max(0, n - special), false)}
     <div class="durs">${durSel('day','☀️ 낮')}${durSel('vote','🗳️ 투표')}${durSel('night','🌙 밤')}</div>
@@ -937,16 +1352,18 @@ document.addEventListener('click', e => {
   else if (a === 'start') send({ type:'start' });
   else if (a === 'skip') send({ type:'skip' });
   else if (a === 'restart') send({ type:'restart' });
-  else if (a === 'recommend') send({ type:'config', config:{ roles: recommend(S.players.length), dur: S.config.dur } });
+  else if (a === 'setgame') send({ type:'setgame', game: b.dataset.game });
+  else if (a === 'recommend') send({ type:'config', config:{ ...S.config, roles: recommend(S.players.length) } });
   else if (a === 'cfg') {
     const roles = { ...S.config.roles };
     roles[b.dataset.role] = Math.max(0, Math.min(ROLE[b.dataset.role].max, roles[b.dataset.role] + Number(b.dataset.d) * (ROLE[b.dataset.role].step || 1)));
-    send({ type:'config', config:{ roles, dur: S.config.dur } });
+    send({ type:'config', config:{ ...S.config, roles } });
   }
 }, true);
 document.addEventListener('change', e => {
+  if (e.target.matches('select[data-rkturn]')) return send({ type:'config', config:{ ...S.config, rkTurn: Number(e.target.value) } });
   const sel = e.target.closest('select[data-dur]'); if (!sel) return;
-  send({ type:'config', config:{ roles: S.config.roles, dur: { ...S.config.dur, [sel.dataset.dur]: Number(sel.value) } } });
+  send({ type:'config', config:{ ...S.config, dur: { ...S.config.dur, [sel.dataset.dur]: Number(sel.value) } } });
 });
 
 // 타이머 (마지막 10초는 빨갛게 + 째깍 소리)
@@ -958,14 +1375,14 @@ setInterval(() => {
   const r = Math.max(0, Math.ceil((localEnd - Date.now()) / 1000));
   el.textContent = `${Math.floor(r/60)}:${String(r%60).padStart(2,'0')}`;
   el.classList.toggle('hurry', r <= 10);
-  if (r !== lastSec && r <= 10 && r > 0) Music.sfx('tick');
+  if (r !== lastSec && r <= 10 && r > 0 && !(S.game === 'rummikub' && !rkMine(S))) Music.sfx('tick');
   lastSec = r;
 }, 200);
 
 /* ================= 방장(호스트): 게임 진행 ================= */
 const H = {
   players: [], phase:'lobby', day:0, endAt:0, votes:{}, night:{}, blocked:null, timer:null, winner:null, compo:'',
-  config: { roles: recommend(4), dur: { day:120, vote:30, night:30 } }
+  config: { roles: recommend(4), dur: { day:120, vote:30, night:30 }, rkTurn: 90 }, game: 'mafia'
 };
 const lastSeen = {}, byeAt = {};
 const P = id => H.players.find(p => p.id === id);
@@ -975,7 +1392,9 @@ const deadChannel = x => !x.alive || x.role === 'medium';
 
 function deliver(pid, m){
   if (pid === myId) { recv(m); return; }
-  pub(T('/to/' + pid), m);
+  const r = route[pid];
+  if (r && r.sure && r.c.connected) pubOn(r.c, T('/to/' + pid), m);
+  else pub(T('/to/' + pid), m);
 }
 // 연결 확인: 응답이 오래 없거나 연결이 끊긴 뒤 15초 안에 돌아오지 않으면 퇴장 처리
 setInterval(() => {
@@ -987,7 +1406,13 @@ setInterval(() => {
   });
 }, 3000);
 function toWhere(fn, m){ H.players.forEach(p => { if (p.online && fn(p)) deliver(p.id, m); }); }
-function bcast(m){ recv(m); pub(T('/pub'), m); }      // 전체 공개 메시지는 한 번만 보냄
+function bcast(m){                                     // 전체 공개 메시지: 참가자들이 쓰는 서버에만 한 번씩
+  recv(m);
+  const others = H.players.filter(p => p.online && p.id !== myId);
+  if (!others.length) return;
+  if (others.some(p => !(route[p.id] && route[p.id].sure && route[p.id].c.connected))) return pub(T('/pub'), m);
+  new Set(others.map(p => route[p.id].c)).forEach(c => pubOn(c, T('/pub'), m));
+}
 function mc(text){ bcast({ type:'mc', text }); }
 function mcTo(pid, text){ deliver(pid, { type:'mc', text, private:true }); }
 function mcWhere(fn, text){ toWhere(fn, { type:'mc', text, private:true }); }
@@ -1003,7 +1428,8 @@ function view(p){
     type:'state', phase:H.phase, day:H.day, remaining: H.endAt ? Math.max(0, H.endAt - Date.now()) : 0,
     hostId: myId, code: roomCode, me: p.id, myRole: p.role, alive: p.alive, contact: !!p.contact,
     myVote: H.votes[p.id] || null, myAction: H.phase === 'night' && p.role ? (H.night[p.role] || null) : null,
-    myUsed: !!p.used, blockedMe: H.blocked === p.id, winner: H.winner, config: H.config, compo: H.compo,
+    myUsed: !!p.used, blockedMe: H.blocked === p.id, winner: H.winner, config: H.config, compo: H.compo, game: H.game,
+    rk: H.game === 'rummikub' && (H.phase === 'rk' || H.phase === 'end') && RK.order ? rkView(p) : null,
     players: H.players.map(q => ({
       id:q.id, name:q.name, alive:q.alive, online:q.online, votes: counts[q.id] || 0,
       role: (reveal || q.id === p.id || (mafiaSide(p) && mafiaSide(q)) || (p.role === 'traitor' && q.role === 'mafia') || (p.role === 'lover' && q.role === 'lover')) ? q.role : null
@@ -1033,7 +1459,8 @@ function sanitizeConfig(c){
   if (roles.lover % 2) roles.lover = 0;
   const dur = {};
   ['day','vote','night'].forEach(k => { const v = Number(c && c.dur && c.dur[k]); dur[k] = DUR_OPTS[k].includes(v) ? v : H.config.dur[k]; });
-  return { roles, dur };
+  const rkTurn = [60,90,120,180].includes(Number(c && c.rkTurn)) ? Number(c.rkTurn) : (H.config.rkTurn || 90);
+  return { roles, dur, rkTurn };
 }
 
 function hostHandle(pid, m){
@@ -1053,7 +1480,8 @@ function hostHandle(pid, m){
       return;
     }
     if (H.phase !== 'lobby') return deliver(pid, { type:'error', text:'이미 게임이 진행 중이에요. 다음 판에 참가해 주세요.', fatal:true });
-    if (H.players.length >= MAX_PLAYERS) return deliver(pid, { type:'error', text:'방이 가득 찼어요 (최대 12명).', fatal:true });
+    const cap = H.game === 'rummikub' ? 5 : MAX_PLAYERS;
+    if (H.players.length >= cap) return deliver(pid, { type:'error', text:`방이 가득 찼어요 (최대 ${cap}명).`, fatal:true });
     const base = String(m.name || '').trim().slice(0,10) || '익명';
     let name = base, i = 2;
     while (H.players.some(p => p.name === name)) name = base + (i++);
@@ -1076,7 +1504,8 @@ function hostHandle(pid, m){
         p.lastImg = now; img = m.img;
       }
       if (!text && !img) return;
-      const msg = { type:'chat', from:p.name, fromId:p.id, text, img, ch:'all', ts: Date.now() };
+      const msg = { type:'chat', from:p.name, fromId:p.id, text, img, ch:'all', ts: Date.now(), mid: String(m.mid || '').slice(0, 12) || null };
+      if (m.reply && typeof m.reply === 'object') msg.reply = { mid: String(m.reply.mid || '').slice(0, 12), from: String(m.reply.from || '').slice(0, 12), text: String(m.reply.text || '').slice(0, 60) };
       if (!inGame()) return bcast(msg);
       if (!p.alive) return toWhere(deadChannel, { ...msg, ch:'dead' });
       if (H.phase === 'night') {
@@ -1087,16 +1516,46 @@ function hostHandle(pid, m){
       }
       return bcast(msg);
     }
+    case 'rename': {
+      const nn = String(m.name || '').trim().slice(0, 10);
+      if (!nn || nn === p.name) return;
+      if (H.players.some(q => q.name === nn)) return deliver(pid, { type:'error', text:'이미 있는 닉네임이에요.' });
+      const old = p.name; p.name = nn;
+      deliver(pid, { type:'renamed', name: nn });
+      mc(`✏️ ${old}님이 닉네임을 '${nn}'(으)로 바꿨어요.`);
+      broadcastState();
+      return;
+    }
     case 'config': {
       if (pid !== myId || H.phase !== 'lobby') return;
       H.config = sanitizeConfig(m.config);
       broadcastState();
       return;
     }
+    case 'setgame': {
+      if (pid !== myId || H.phase !== 'lobby' || !['mafia','rummikub'].includes(m.game)) return;
+      H.game = m.game;
+      mc(m.game === 'rummikub' ? '🀄 게임이 루미큐브로 바뀌었어요! (2~5명)' : '🕵️ 게임이 마피아로 바뀌었어요!');
+      broadcastState();
+      return;
+    }
+    case 'rk_draft':
+      if (H.phase === 'rk' && pid === rkCur()) { RK.draft = m.table === null ? null : rkClean(m.table); broadcastState(); }
+      return;
+    case 'rk_commit':
+      if (H.phase === 'rk' && pid === rkCur()) rkCommit(pid, m.table);
+      return;
+    case 'rk_draw':
+      if (H.phase === 'rk' && pid === rkCur()) rkDraw(pid, false);
+      return;
     case 'start': {
       if (pid !== myId || H.phase !== 'lobby') return;
       H.players = H.players.filter(q => q.online);
       const n = H.players.length;
+      if (H.game === 'rummikub') {
+        if (n < 2 || n > 5) return deliver(pid, { type:'error', text:'루미큐브는 2~5명이 필요해요.' });
+        return rkStart();
+      }
       const err = validate(H.config, n);
       if (err) return deliver(pid, { type:'error', text: err });
       const roles = [];
@@ -1169,7 +1628,8 @@ function hostHandle(pid, m){
       H.players = H.players.filter(q => q.online);
       H.players.forEach(q => { q.role = null; q.alive = true; q.used = false; q.contact = false; q.armor = false; });
       H.phase = 'lobby'; H.day = 0; H.endAt = 0; H.winner = null; H.votes = {}; H.blocked = null;
-      mc('🏠 대기실로 돌아왔습니다. 방장이 역할을 다시 정하고 시작할 수 있어요.');
+      clearTimeout(H.timer); RK.order = null;
+      mc('🏠 대기실로 돌아왔습니다. 방장이 게임과 설정을 고르고 다시 시작할 수 있어요.');
       broadcastState();
       return;
     }
@@ -1303,6 +1763,14 @@ function checkWin(){
 function hostLeave(pid){
   delete byeAt[pid];
   const p = P(pid); if (!p || !p.online) return;
+  if (H.phase === 'rk') {
+    p.online = false;
+    mc(`🚪 ${p.name}님이 게임을 나갔어요.`);
+    const act = RK.order.filter(id => (P(id) || {}).online);
+    if (act.length < 2) return rkEnd(act[0] || null);
+    if (rkCur() === pid) return rkNext();
+    return broadcastState();
+  }
   if (!inGame()) {
     H.players = H.players.filter(q => q.id !== pid);
     mc(`${p.name}님이 나갔습니다.`);
@@ -1316,6 +1784,118 @@ function hostLeave(pid){
   if (checkWin()) return;
   checkVoteDone();
   checkNightDone();
+  broadcastState();
+}
+
+/* ================= 방장: 루미큐브 진행 ================= */
+const RK = { order:null };
+function shuffle(a){ for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+const rkCur = () => RK.order ? RK.order[RK.turn] : null;
+function rkView(p){
+  return {
+    table: RK.table, draft: RK.draft, rack: RK.racks[p.id] || [], pool: RK.pool.length,
+    counts: Object.fromEntries(RK.order.map(id => [id, RK.racks[id].length])),
+    order: RK.order, cur: rkCur(), turnNo: RK.turnNo, melded: RK.melded, scores: RK.scores
+  };
+}
+function rkClean(t){
+  if (!Array.isArray(t) || t.length > 60) return null;
+  const out = [];
+  for (const set of t) {
+    if (!Array.isArray(set) || set.length > 13) return null;
+    const a = set.map(Number);
+    if (a.some(x => !Number.isInteger(x) || x < 0 || x > 105)) return null;
+    if (a.length) out.push(a);
+  }
+  return out;
+}
+function rkStart(){
+  const ids = shuffle([...Array(106).keys()]);
+  RK.order = shuffle(H.players.map(p => p.id));
+  RK.racks = {}; RK.order.forEach(id => { RK.racks[id] = ids.splice(0, 14); });
+  RK.pool = ids; RK.table = []; RK.melded = {}; RK.passes = 0; RK.turn = 0; RK.turnNo = 0; RK.draft = null; RK.scores = null;
+  H.phase = 'rk'; H.winner = null;
+  mc(`🀄 루미큐브를 시작합니다! 순서: ${RK.order.map(id => P(id).name).join(' → ')}. 첫 등록은 내 타일로만 30점 이상이에요. 행운을 빌어요!`);
+  rkBeginTurn();
+}
+function rkBeginTurn(){
+  RK.draft = null; RK.turnNo++;
+  clearTimeout(H.timer);
+  const ms = H.config.rkTurn * 1000 * SPEED;
+  H.endAt = Date.now() + ms;
+  const no = RK.turnNo;
+  H.timer = setTimeout(() => { if (H.phase === 'rk' && RK.turnNo === no) rkDraw(rkCur(), true); }, ms);
+  broadcastState();
+}
+function rkNext(){
+  const n = RK.order.length;
+  for (let i = 1; i <= n; i++) {
+    const k = (RK.turn + i) % n, q = P(RK.order[k]);
+    if (q && q.online) { RK.turn = k; return rkBeginTurn(); }
+  }
+  rkEnd(null);
+}
+function rkDraw(pid, timeout){
+  const p = P(pid); RK.draft = null;
+  if (RK.pool.length) {
+    RK.racks[pid].push(RK.pool.pop()); RK.passes = 0;
+    mc(timeout ? `⏰ ${p.name}님 시간 초과! 한 장을 뽑았어요.` : `🀫 ${p.name}님이 한 장 뽑았어요.`);
+  } else {
+    RK.passes++;
+    mc(`⏭️ ${p.name}님이 패스했어요. (더미가 비었어요)`);
+    const act = RK.order.filter(id => (P(id) || {}).online).length;
+    if (RK.passes >= act) return rkEnd(null);
+  }
+  rkNext();
+}
+function rkCommit(pid, raw){
+  const fail = t => deliver(pid, { type:'error', text: '❌ ' + t });
+  const table = rkClean(raw); if (!table) return fail('잘못된 배치예요.');
+  const rack = RK.racks[pid], flat = table.flat(), old = RK.table.flat();
+  const before = new Set([...old, ...rack]);
+  if (new Set(flat).size !== flat.length || flat.some(id => !before.has(id))) return fail('잘못된 타일이 있어요.');
+  const fs = new Set(flat);
+  if (old.some(id => !fs.has(id))) return fail('테이블에 있던 타일은 다시 가져갈 수 없어요.');
+  const oldSet = new Set(old), played = flat.filter(id => !oldSet.has(id));
+  if (!played.length) return fail('타일을 1장 이상 내려놓아야 해요.');
+  const infos = table.map(setInfo);
+  if (infos.some(i => !i.ok)) return fail('올바르지 않은 세트가 있어요.');
+  if (!RK.melded[pid]) {
+    const key = a => a.slice().sort((x, y) => x - y).join(',');
+    const oldKeys = RK.table.map(key);
+    const pset = new Set(played);
+    let pts = 0;
+    for (let i = 0; i < table.length; i++) {
+      const hasNew = table[i].some(id => pset.has(id));
+      if (hasNew) {
+        if (table[i].some(id => !pset.has(id))) return fail('첫 등록 때는 테이블 타일을 건드릴 수 없어요.');
+        pts += infos[i].value;
+      } else {
+        const k = key(table[i]), at = oldKeys.indexOf(k);
+        if (at < 0) return fail('첫 등록 때는 테이블 타일을 건드릴 수 없어요.');
+        oldKeys.splice(at, 1);
+      }
+    }
+    if (pts < 30) return fail(`첫 등록은 30점 이상이어야 해요. (지금 ${pts}점)`);
+  }
+  RK.table = infos.map(i => i.order);
+  const ps = new Set(played);
+  RK.racks[pid] = rack.filter(id => !ps.has(id));
+  const first = !RK.melded[pid];
+  RK.melded[pid] = true; RK.passes = 0; RK.draft = null;
+  mc(`🀄 ${P(pid).name}님이 ${played.length}장을 내려놓았어요${first ? ' (첫 등록 성공!)' : ''}. 남은 타일 ${RK.racks[pid].length}장`);
+  if (!RK.racks[pid].length) return rkEnd(pid);
+  rkNext();
+}
+function rkEnd(winner){
+  clearTimeout(H.timer);
+  const val = id => RK.racks[id].reduce((a, t) => a + tileVal(t), 0);
+  if (!winner) winner = RK.order.slice().sort((a, b) => val(a) - val(b) || RK.racks[a].length - RK.racks[b].length)[0];
+  let pot = 0;
+  RK.scores = RK.order.map(id => { const v = id === winner ? 0 : val(id); pot += v; return { id, name: (P(id) || {}).name || '?', left: RK.racks[id].length, score: -v }; });
+  RK.scores.find(x => x.id === winner).score = pot;
+  H.winner = winner; H.phase = 'end'; H.endAt = 0; RK.draft = null;
+  mc(`🏆 게임 끝! ${(P(winner) || {}).name}님이 승리했어요! (${RK.scores.map(x => `${x.name} ${x.score > 0 ? '+' : ''}${x.score}`).join(', ')})`);
   broadcastState();
 }
 
