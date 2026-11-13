@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>마피아 게임</title>
-<script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
+<script src="https://unpkg.com/mqtt@5.16.1/dist/mqtt.min.js"></script>
 <style>
   :root{
     --bg:#14151c; --panel:#1f2130; --panel2:#272a3d; --text:#eceef7; --muted:#9aa0b8;
@@ -141,6 +141,7 @@
     · <b>투표</b> 처형할 사람에게 투표해요. 모두 투표하면 바로 넘어가요. 동점이면 아무도 죽지 않아요.<br>
     · <b>밤</b> 마피아끼리 비밀 채팅으로 상의해서 한 명을 제거해요. 다른 능력자들도 능력을 써요.<br>
     · 마피아가 모두 죽으면 <b>시민 승리</b>, 마피아 팀 수가 나머지와 같아지면 <b>마피아 승리</b>.<br>
+    · 서로 다른 와이파이·휴대폰 데이터여도 방 코드만 있으면 접속돼요.<br>
     · 역할 구성(마피아·스파이·배신자·의사·경찰·군인·정치인·영매·기자·건달·연인)과 시간은 방장이 대기실에서 정해요.
   </div>
 </section>
@@ -178,7 +179,6 @@
 
 <script>
 /* ================= 설정 ================= */
-const PREFIX = 'mafia-game-kr-v2-';
 const SPEED = parseFloat(new URLSearchParams(location.search).get('speed')) || 1; // 테스트용 배속
 const MAX_PLAYERS = 12;
 const DUR_OPTS = { day:[60,90,120,180,240,300], vote:[20,30,45,60], night:[20,30,45,60,90] };
@@ -234,8 +234,54 @@ function compoText(cfg, n){
 const $ = s => document.querySelector(s);
 const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
-let peer = null, myId = null, isHost = false, hostConn = null, roomCode = '', myName = '';
-let S = null, localEnd = 0, leaving = false;
+let mq = null, myId = null, isHost = false, roomCode = '', myName = '';
+let S = null, localEnd = 0, leaving = false, joinWaiter = null;
+
+/* ================= 통신(중계 서버) ================= */
+// 모든 메시지는 공개 중계 서버(MQTT)를 거쳐 주고받아요. 직접 연결이 아니라서 네트워크가 달라도 접속돼요.
+const qsBroker = new URLSearchParams(location.search).get('broker');
+const BROKERS = qsBroker ? [qsBroker] : [
+  'wss://broker.emqx.io:8084/mqtt',
+  'wss://broker.hivemq.com:8884/mqtt',
+  'wss://test.mosquitto.org:8081/mqtt'
+];
+const T = s => 'mafiakr/v3/' + roomCode + s;
+function newId(){ const c = 'abcdefghijklmnopqrstuvwxyz0123456789'; let s = ''; for (let i=0;i<12;i++) s += c[Math.floor(Math.random()*c.length)]; return s; }
+myId = (() => { try { let v = sessionStorage.getItem('mafia_id'); if (!v) { v = newId(); sessionStorage.setItem('mafia_id', v); } return v; } catch(e) { return newId(); } })();
+
+function connectBroker(url, will){
+  return new Promise((resolve, reject) => {
+    let done = false;
+    const c = mqtt.connect(url, { clientId: 'mk_' + myId + '_' + Math.random().toString(36).slice(2,6),
+      clean: true, connectTimeout: 7000, reconnectPeriod: 0, keepalive: 30, will });
+    const fail = e => { if (done) return; done = true; clearTimeout(t); try { c.end(true); } catch(_){} reject(e); };
+    const t = setTimeout(() => fail(new Error('timeout')), 8000);
+    c.on('connect', () => { if (done) return; done = true; clearTimeout(t); c.options.reconnectPeriod = 2000; resolve(c); });
+    c.on('error', fail);
+    c.on('close', () => fail(new Error('closed')));
+  });
+}
+function pub(topic, obj){ if (mq) { try { mq.publish(topic, JSON.stringify(obj)); } catch(e){} } }
+function send(m){
+  if (isHost) hostHandle(myId, m);
+  else pub(T('/host'), { from: myId, m });
+}
+function onMq(topic, buf){
+  let d; try { d = JSON.parse(buf.toString()); } catch(e) { return; }
+  if (!d) return;
+  if (isHost && topic === T('/host')) { if (d.from && d.m) hostHandle(String(d.from), d.m); return; }
+  if (topic === T('/all')) { if (d.type === 'hostgone' && !isHost && S) addErr('⚠️ 방장의 연결이 끊어졌어요. 방장이 다시 연결되면 이어서 진행돼요.'); return; }
+  if (topic === T('/to/' + myId)) recv(d);
+}
+function watchConnection(){
+  mq.on('offline', () => { if (!leaving && S) addErr('⚠️ 인터넷 연결이 끊어졌어요. 다시 연결하는 중...'); });
+  mq.on('connect', () => {          // 재연결
+    if (leaving) return;
+    if (S) addErr('✅ 다시 연결됐어요.');
+    if (isHost) broadcastState(); else send({ type:'join', name: myName });
+  });
+}
+setInterval(() => { if (!isHost && mq && S && !leaving) send({ type:'ping' }); }, 5000);
 
 /* ================= 시작 화면 ================= */
 const qsRoom = new URLSearchParams(location.search).get('room');
@@ -252,7 +298,7 @@ function readNick(){
   return n;
 }
 function checkLib(){
-  if (typeof Peer === 'undefined') { homeErr('통신 라이브러리를 불러오지 못했어요. 인터넷 연결을 확인해 주세요.'); return false; }
+  if (typeof mqtt === 'undefined') { homeErr('통신 라이브러리를 불러오지 못했어요. 인터넷 연결을 확인하고 새로고침해 주세요.'); return false; }
   return true;
 }
 function genCode(){
@@ -260,54 +306,50 @@ function genCode(){
   for (let i=0;i<5;i++) s += c[Math.floor(Math.random()*c.length)];
   return s;
 }
+const NET_FAIL = '중계 서버에 연결하지 못했어요. 와이파이↔휴대폰 데이터를 바꾸거나, 회사·학교 와이파이가 아닌 곳에서 다시 시도해 보세요.';
 
-$('#btnCreate').onclick = () => {
+$('#btnCreate').onclick = async () => {
   homeErr(); const n = readNick(); if (!n || !checkLib()) return;
-  myName = n; isHost = true; setHomeBusy(true); homeStatus('방을 만드는 중...');
-  createHostPeer();
+  myName = n; isHost = true; setHomeBusy(true);
+  roomCode = genCode();
+  for (let i = 0; i < BROKERS.length && !mq; i++) {
+    homeStatus(`서버에 연결하는 중... (${i+1}/${BROKERS.length})`);
+    try { mq = await connectBroker(BROKERS[i], { topic: T('/all'), payload: JSON.stringify({ type:'hostgone' }), qos: 0, retain: false }); }
+    catch(e) { mq = null; }
+  }
+  if (!mq) { isHost = false; setHomeBusy(false); homeStatus(); homeErr(NET_FAIL); return; }
+  mq.on('message', onMq);
+  await new Promise(r => mq.subscribe(T('/host'), r));
+  watchConnection();
+  H.players = [{ id: myId, name: myName, role:null, alive:true, online:true }];
+  enterRoom();
+  mcTo(myId, `방이 만들어졌어요. 친구들에게 방 코드 [${roomCode}]를 알려주세요. 역할 구성은 아래 '역할 설정'에서 바꿀 수 있어요.`);
+  broadcastState();
 };
-function createHostPeer(tries = 0){
-  const code = genCode();
-  peer = new Peer(PREFIX + code, { debug: 0 });
-  peer.on('open', id => {
-    myId = id; roomCode = code;
-    H.players = [{ id, name: myName, role:null, alive:true, online:true }];
-    enterRoom();
-    mcTo(myId, `방이 만들어졌어요. 친구들에게 방 코드 [${code}]를 알려주세요. 역할 구성은 아래 '역할 설정'에서 바꿀 수 있어요.`);
-    broadcastState();
-  });
-  peer.on('connection', hostOnConn);
-  peer.on('error', err => {
-    if (err.type === 'unavailable-id' && tries < 5) { peer.destroy(); createHostPeer(tries+1); return; }
-    if (!S) { setHomeBusy(false); homeStatus(); homeErr('연결 오류: ' + (err.type || err.message)); }
-    else addErr('연결 오류: ' + (err.type || err.message));
-  });
-  peer.on('disconnected', () => { if (!leaving && peer && !peer.destroyed) peer.reconnect(); });
-}
 
-$('#btnJoin').onclick = () => {
+$('#btnJoin').onclick = async () => {
   homeErr(); const n = readNick(); if (!n || !checkLib()) return;
   const code = $('#joinCode').value.trim().toUpperCase();
   if (code.length !== 5) { homeErr('방 코드 5자리를 입력해 주세요.'); return; }
-  myName = n; isHost = false; setHomeBusy(true); homeStatus('방에 접속하는 중...');
-  peer = new Peer({ debug: 0 });
-  peer.on('open', id => {
-    myId = id;
-    hostConn = peer.connect(PREFIX + code, { reliable: true });
-    hostConn.on('open', () => hostConn.send({ type:'join', name: myName }));
-    hostConn.on('data', recv);
-    hostConn.on('close', () => {
-      if (leaving) return;
-      if (S) { addErr('방장과의 연결이 끊어졌어요. 게임을 계속할 수 없어요.'); $('#chatInput').disabled = true; }
-      else { setHomeBusy(false); homeStatus(); homeErr('방에 접속하지 못했어요.'); }
-    });
-  });
-  peer.on('error', err => {
-    if (!S) {
-      setHomeBusy(false); homeStatus();
-      homeErr(err.type === 'peer-unavailable' ? '방을 찾을 수 없어요. 코드를 확인해 주세요.' : '연결 오류: ' + (err.type || err.message));
-    } else addErr('연결 오류: ' + (err.type || err.message));
-  });
+  myName = n; isHost = false; roomCode = code; setHomeBusy(true);
+  let reached = false;
+  for (let i = 0; i < BROKERS.length; i++) {
+    homeStatus(`방을 찾는 중... (${i+1}/${BROKERS.length})`);
+    let c;
+    try { c = await connectBroker(BROKERS[i], { topic: T('/host'), payload: JSON.stringify({ from: myId, m: { type:'bye' } }), qos: 0, retain: false }); }
+    catch(e) { continue; }
+    reached = true; mq = c;
+    mq.on('message', onMq);
+    await new Promise(r => mq.subscribe([T('/to/' + myId), T('/all')], r));
+    const res = await new Promise(r => { joinWaiter = r; send({ type:'join', name: myName }); setTimeout(() => r('timeout'), 5000); });
+    joinWaiter = null;
+    if (res === 'ok') { watchConnection(); return; }
+    try { mq.end(true); } catch(e){}
+    mq = null;
+    if (res === 'fatal') return;
+  }
+  setHomeBusy(false); homeStatus();
+  homeErr(reached ? '방을 찾을 수 없어요. 방 코드가 맞는지, 방장 화면이 켜져 있는지 확인해 주세요.' : NET_FAIL);
 };
 $('#nick').addEventListener('keydown', e => { if (e.key === 'Enter') ($('#joinCode').value.trim() ? $('#btnJoin') : $('#btnCreate')).click(); });
 $('#joinCode').addEventListener('keydown', e => { if (e.key === 'Enter') $('#btnJoin').click(); });
@@ -325,25 +367,25 @@ $('#btnCopy').onclick = () => {
 $('#btnLeave').onclick = () => {
   if (S && !['lobby','end'].includes(S.phase) && !confirm('게임 중에 나가면 사망 처리돼요. 나갈까요?')) return;
   if (isHost && !confirm('방장이 나가면 방이 사라져요. 나갈까요?')) return;
-  leaving = true; try { peer && peer.destroy(); } catch(e){}
-  location.href = location.pathname;
+  if (isHost) pub(T('/all'), { type:'hostgone' }); else send({ type:'bye', now:true });
+  leaving = true;
+  try { sessionStorage.removeItem('mafia_id'); } catch(e){}
+  setTimeout(() => { try { mq && mq.end(); } catch(e){} location.href = location.pathname; }, 400);
 };
-
-/* ================= 통신 ================= */
-function send(m){
-  if (isHost) hostHandle(myId, m);
-  else if (hostConn && hostConn.open) hostConn.send(m);
-}
 
 /* ================= 클라이언트: 수신 ================= */
 function recv(m){
   switch (m.type) {
-    case 'welcome': roomCode = m.code; myName = m.name; enterRoom(); break;
+    case 'welcome':
+      if (joinWaiter) joinWaiter('ok');
+      roomCode = m.code; myName = m.name;
+      if ($('#room').classList.contains('hidden')) enterRoom();
+      break;
     case 'state': S = m; localEnd = m.remaining ? Date.now() + m.remaining : 0; render(); break;
     case 'chat': addChat(m); break;
     case 'mc': addMC(m.text, m.private); break;
     case 'error':
-      if (m.fatal && !S) { setHomeBusy(false); homeStatus(); homeErr(m.text); leaving = true; peer && peer.destroy(); }
+      if (m.fatal && !S) { if (joinWaiter) joinWaiter('fatal'); setHomeBusy(false); homeStatus(); homeErr(m.text); }
       else addErr(m.text);
       break;
   }
@@ -548,22 +590,25 @@ const H = {
   players: [], phase:'lobby', day:0, endAt:0, votes:{}, night:{}, blocked:null, timer:null, winner:null, compo:'',
   config: { roles: recommend(4), dur: { day:120, vote:30, night:30 } }
 };
-const conns = {};
+const lastSeen = {}, byeAt = {};
 const P = id => H.players.find(p => p.id === id);
 const inGame = () => ['day','vote','night'].includes(H.phase);
 const mafiaSide = x => x.role === 'mafia' || (x.role === 'spy' && x.contact);
 const deadChannel = x => !x.alive || x.role === 'medium';
 
-function hostOnConn(conn){
-  conn.on('data', d => hostHandle(conn.peer, d, conn));
-  conn.on('close', () => hostLeave(conn.peer));
-  conn.on('error', () => {});
-}
 function deliver(pid, m){
   if (pid === myId) { recv(m); return; }
-  const c = conns[pid];
-  if (c && c.open) { try { c.send(m); } catch(e){} }
+  pub(T('/to/' + pid), m);
 }
+// 연결 확인: 응답이 오래 없거나 연결이 끊긴 뒤 15초 안에 돌아오지 않으면 퇴장 처리
+setInterval(() => {
+  if (!isHost) return;
+  const now = Date.now();
+  H.players.slice().forEach(p => {
+    if (p.id === myId || !p.online) return;
+    if (now - (lastSeen[p.id] || now) > 60000 || (byeAt[p.id] && now - byeAt[p.id] > 15000)) hostLeave(p.id);
+  });
+}, 3000);
 function toWhere(fn, m){ H.players.forEach(p => { if (p.online && fn(p)) deliver(p.id, m); }); }
 function mc(text){ toWhere(() => true, { type:'mc', text }); }
 function mcTo(pid, text){ deliver(pid, { type:'mc', text, private:true }); }
@@ -613,20 +658,29 @@ function sanitizeConfig(c){
   return { roles, dur };
 }
 
-function hostHandle(pid, m, conn){
+function hostHandle(pid, m){
   if (!m || typeof m !== 'object') return;
+  if (pid !== myId) {
+    if (m.type === 'bye') { if (m.now) hostLeave(pid); else byeAt[pid] = Date.now(); return; }
+    lastSeen[pid] = Date.now(); delete byeAt[pid];
+    if (m.type === 'ping') return;
+  }
 
   if (m.type === 'join') {
-    if (!conn) return;
-    if (H.phase !== 'lobby') { conn.send({ type:'error', text:'이미 게임이 진행 중이에요. 다음 판에 참가해 주세요.', fatal:true }); setTimeout(() => conn.close(), 800); return; }
-    if (H.players.length >= MAX_PLAYERS) { conn.send({ type:'error', text:'방이 가득 찼어요 (최대 12명).', fatal:true }); setTimeout(() => conn.close(), 800); return; }
-    if (P(pid)) return;
-    conns[pid] = conn;
+    const ex = P(pid);
+    if (ex) {               // 재접속
+      if (!ex.online) { ex.online = true; mc(`${ex.name}님이 다시 접속했어요.`); }
+      deliver(pid, { type:'welcome', code: roomCode, name: ex.name });
+      broadcastState();
+      return;
+    }
+    if (H.phase !== 'lobby') return deliver(pid, { type:'error', text:'이미 게임이 진행 중이에요. 다음 판에 참가해 주세요.', fatal:true });
+    if (H.players.length >= MAX_PLAYERS) return deliver(pid, { type:'error', text:'방이 가득 찼어요 (최대 12명).', fatal:true });
     const base = String(m.name || '').trim().slice(0,10) || '익명';
     let name = base, i = 2;
     while (H.players.some(p => p.name === name)) name = base + (i++);
     H.players.push({ id:pid, name, role:null, alive:true, online:true });
-    conn.send({ type:'welcome', code: roomCode, name });
+    deliver(pid, { type:'welcome', code: roomCode, name });
     mc(`${name}님이 입장했어요. 환영합니다!`);
     broadcastState();
     return;
@@ -858,7 +912,7 @@ function checkWin(){
   return true;
 }
 function hostLeave(pid){
-  delete conns[pid];
+  delete byeAt[pid];
   const p = P(pid); if (!p || !p.online) return;
   if (!inGame()) {
     H.players = H.players.filter(q => q.id !== pid);
