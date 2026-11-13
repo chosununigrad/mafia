@@ -92,7 +92,9 @@
 
   /* ---------- 채팅 (가운데) ---------- */
   .chat{display:flex;flex-direction:column;min-height:0;padding:0;overflow:hidden}
-  #log{flex:1;overflow-y:auto;padding:14px 16px;min-height:200px;scroll-behavior:smooth}
+  #log{flex:1;overflow-y:auto;padding:14px 16px;min-height:200px;position:relative}
+  #newMsg{position:absolute;left:50%;transform:translateX(-50%);bottom:86px;z-index:5;padding:6px 14px;font-size:13px;border-radius:20px;box-shadow:0 4px 12px rgba(0,0,0,.4)}
+  .chat{position:relative}
   .m{display:flex;gap:8px;margin-top:10px;align-items:flex-end}
   .m.cont{margin-top:3px}
   .m.cont .av{visibility:hidden;height:0}
@@ -198,6 +200,17 @@
   .rkbar .pool{color:var(--muted);font-size:13px}
   .board{flex:1;min-height:120px;overflow:auto;padding:14px;border-radius:16px;display:flex;flex-wrap:wrap;gap:12px;align-content:flex-start;
          background:radial-gradient(rgba(255,255,255,.06) 1px,transparent 1.5px) 0 0/18px 18px,linear-gradient(160deg,#25407a,#172a55);border:1px solid #3a5490;box-shadow:inset 0 0 30px rgba(0,0,0,.35)}
+  .board.grid{display:grid;grid-template-columns:repeat(14,minmax(0,1fr));gap:3px;align-content:start;container-type:inline-size}
+  .cell{width:100%;aspect-ratio:.72;border-radius:6px;min-width:0}
+  .cell.empty{background:rgba(255,255,255,.035)}
+  .board.mine .cell.empty{background:rgba(255,255,255,.07);outline:1px dashed rgba(255,255,255,.14);outline-offset:-1px}
+  .cell.over{background:rgba(224,176,74,.35)!important;outline:2px solid var(--accent)!important}
+  .board .tile{width:100%;height:100%;font-size:clamp(11px,3.3cqw,22px);border-radius:5px}
+  .tile.bad{background:linear-gradient(180deg,#ffe9e9,#f7c9c9);box-shadow:0 0 0 2px #e2554f,0 3px 0 #c99,0 4px 7px rgba(0,0,0,.4)}
+  .tile{touch-action:none}
+  .tile.dragging{opacity:.3}
+  .dragGhost{position:fixed;z-index:300;pointer-events:none;transform:translate(-50%,-60%) scale(1.15);box-shadow:0 12px 24px rgba(0,0,0,.55)!important}
+  .rack .tile.over{box-shadow:-4px 0 0 var(--accent),0 3px 0 #c9c0a8}
   .board .empty{color:rgba(255,255,255,.55);font-size:14px;margin:auto;text-align:center}
   .rkset{display:flex;gap:2px;padding:5px;border-radius:9px;background:rgba(255,255,255,.08);border:2px solid transparent;align-items:center;min-height:62px}
   .rkset.bad{border-color:var(--red);background:rgba(226,85,79,.15)}
@@ -313,7 +326,7 @@
     · 첫 등록은 내 타일로만 30점 이상. 이후엔 테이블 타일을 자유롭게 재배치할 수 있어요.<br>
     · 낼 게 없으면 한 장 뽑기. 먼저 타일을 다 내려놓으면 승리!
   </div>
-  <div class="ver">버전 v6 · 모두 같은 버전 파일로 접속해야 해요</div>
+  <div class="ver">버전 v6.3 · 모두 같은 버전 파일로 접속해야 해요</div>
 </section>
 
 <!-- ===== 게임 화면 ===== -->
@@ -347,10 +360,10 @@
     </div>
     <div id="rkArea">
       <div class="rkbar"><span class="turn" id="rkTurn"></span><span class="pool" id="rkPool"></span><span class="rkmsg" id="rkMsg"></span></div>
-      <div class="board" id="rkBoard"></div>
+      <div class="board grid" id="rkBoard"></div>
       <div class="rackWrap">
         <div class="rackTools"><span>내 타일 <b id="rkCount"></b></span>
-          <button data-rk="sortnum" id="sortNum">숫자순</button><button data-rk="sortcol" id="sortCol">색깔순</button>
+          <button data-rk="sortnum" id="sortNum">숫자순</button><button data-rk="sortcol" id="sortCol">색깔순</button><button data-rk="sortfree" id="sortFree">✋ 자유</button>
           <span style="flex:1"></span><span id="rkMeld"></span></div>
         <div class="rack" id="rkRack"></div>
       </div>
@@ -358,6 +371,7 @@
     </div>
     <div class="card chat">
       <div id="log"></div>
+      <button type="button" id="newMsg" class="hidden">⬇ 새 메시지</button>
       <div class="composer">
         <div id="replyBar" class="hidden"><span></span><button type="button" id="replyX">✕</button></div>
         <span id="chanLabel"></span>
@@ -461,6 +475,19 @@ function setInfo(ids){
   }
   return { ok:false, order: fallback };
 }
+const RK_COLS = 14, RK_MAXROWS = 20;
+// 판의 칸 배치 [타일, 줄, 칸] 목록에서, 가로로 붙어 있는 타일끼리 한 세트로 묶어요
+function setsFromCells(cells){
+  const rows = {};
+  cells.forEach(t => (rows[t[1]] = rows[t[1]] || []).push(t));
+  const out = [];
+  Object.keys(rows).forEach(r => {
+    const a = rows[r].slice().sort((x, y) => x[2] - y[2]); let cur = [];
+    a.forEach(t => { if (cur.length && t[2] !== cur[cur.length - 1][2] + 1) { out.push(cur); cur = []; } cur.push(t); });
+    if (cur.length) out.push(cur);
+  });
+  return out.map(seg => seg.map(t => t[0]));
+}
 function tileHTML(id, cls = ''){
   const t = tileOf(id);
   return t.j ? `<div class="tile jk ${cls}" data-tid="${id}">☺</div>` : `<div class="tile c${t.c} ${cls}" data-tid="${id}">${t.n}</div>`;
@@ -484,7 +511,7 @@ const BROKERS = qsBroker ? qsBroker.split(',') : [
   'wss://test.mosquitto.org:8081/mqtt'
 ];
 const brokerName = u => { try { return new URL(u).hostname.split('.').slice(-2, -1)[0] || u; } catch(e) { return u; } };
-const T = s => 'mafiakr/v6/' + roomCode + s;
+const T = s => 'mafiakr/v63/' + roomCode + s;
 function newId(){ const c = 'abcdefghijklmnopqrstuvwxyz0123456789'; let s = ''; for (let i=0;i<12;i++) s += c[Math.floor(Math.random()*c.length)]; return s; }
 myId = (() => { try { let v = sessionStorage.getItem('mafia_id'); if (!v) { v = newId(); sessionStorage.setItem('mafia_id', v); } return v; } catch(e) { return newId(); } })();
 
@@ -545,6 +572,11 @@ function watchConnection(){
   mq.on('connect', () => { if (leaving) return; if (S) sysLine('✅ 다시 연결됐어요.'); send({ type:'join', name: myName }); setTimeout(() => send({ type:'ping' }), 300); });
 }
 setInterval(() => { if (!isHost && mq && S && !leaving) send({ type:'ping' }); }, 5000);
+document.addEventListener('visibilitychange', () => {   // 다른 앱 갔다가 돌아오면 바로 다시 연결
+  if (document.visibilityState !== 'visible' || leaving) return;
+  if (isHost) { links.forEach(c => { if (!c.connected) { try { c.reconnect(); } catch(e){} } }); if (S) setTimeout(broadcastState, 800); }
+  else if (mq) { if (!mq.connected) { try { mq.reconnect(); } catch(e){} } else if (S) send({ type:'ping' }); }
+});
 setInterval(() => {
   const el = $('#net'); if (!el || !S) return;
   if (isHost) { const on = links.filter(c => c.connected); el.textContent = `📡 ${on.length}/${BROKERS.length}`; el.title = '연결된 중계 서버: ' + on.map(c => c._name).join(', '); }
@@ -607,9 +639,15 @@ $('#btnJoin').onclick = async () => {
   homeStatus('방을 찾는 중...');
   const will = { topic: T('/host'), payload: JSON.stringify({ from: myId, m: { type:'bye' } }), qos: 0, retain: false };
   const cands = []; let fails = 0, done = false;
+  const t0 = Date.now();
+  const retry = setInterval(() => {      // 방장 화면이 잠깐 멈춰 있어도 돌아오면 바로 들어가지도록 계속 다시 요청
+    const sec = Math.round((Date.now() - t0) / 1000);
+    if (cands.length) homeStatus(`방장의 응답을 기다리는 중... ${sec}초 (방장이 게임 화면을 켜 두면 바로 들어가져요)`);
+    cands.forEach(c => pubOn(c, T('/host'), { from: myId, m: { type:'join', name: myName } }));
+  }, 2500);
   const res = await new Promise(resolve => {
     joinWaiter = resolve;
-    setTimeout(() => resolve('timeout'), 12000);
+    setTimeout(() => resolve('timeout'), 45000);
     BROKERS.forEach(u => connectBroker(u, will).then(async c => {
       if (done) { c.end(true); return; }
       cands.push(c);
@@ -618,7 +656,7 @@ $('#btnJoin').onclick = async () => {
       pubOn(c, T('/host'), { from: myId, m: { type:'join', name: myName } });
     }).catch(() => { if (++fails === BROKERS.length) resolve('nonet'); }));
   });
-  done = true; joinWaiter = null;
+  done = true; joinWaiter = null; clearInterval(retry);
   const reachedNames = cands.map(c => c._name);
   cands.forEach(c => { if (c !== mq) { try { c.end(true); } catch(e){} } });
   if (res === 'ok' && mq) { watchConnection(); return; }
@@ -834,13 +872,24 @@ function sysLine(text, err){
   const div = document.createElement('div');
   div.className = 'sysline' + (err ? ' err' : ''); div.textContent = text; pushLog(div);
 }
-function pushLog(div){
+// 채팅 자동 스크롤: 내가 일부러 위로 올려 보고 있을 때만 멈추고, 아니면 항상 맨 아래로
+let stick = true;
+function logToBottom(){ const log = $('#log'); log.scrollTop = log.scrollHeight; stick = true; $('#newMsg').classList.add('hidden'); }
+$('#log').addEventListener('scroll', () => {
   const log = $('#log');
-  const atBottom = log.scrollHeight - log.scrollTop - log.clientHeight < 120;
-  log.appendChild(div);
-  const go = () => { log.scrollTop = log.scrollHeight; };
-  if (atBottom || div.classList.contains('mine')) { go(); div.querySelectorAll('img').forEach(i => i.addEventListener('load', go)); }
+  stick = log.scrollHeight - log.scrollTop - log.clientHeight < 160;
+  if (stick) $('#newMsg').classList.add('hidden');
+}, { passive:true });
+$('#newMsg').onclick = logToBottom;
+function pushLog(div){
+  $('#log').appendChild(div);
+  if (stick || div.classList.contains('mine')) {
+    logToBottom();
+    requestAnimationFrame(logToBottom);
+    div.querySelectorAll('img').forEach(i => i.addEventListener('load', () => { if (stick) logToBottom(); }));
+  } else $('#newMsg').classList.remove('hidden');
 }
+new ResizeObserver(() => { if (stick) $('#log').scrollTop = $('#log').scrollHeight; }).observe($('#log'));
 function chatPayload(extra){
   const m = { type:'chat', mid: newMid(), ...extra };
   if (replyTo) m.reply = replyTo;
@@ -1012,10 +1061,9 @@ function fitViewport(){
   const vv = window.visualViewport;
   const h = vv ? vv.height : window.innerHeight;
   const log = $('#log');
-  const atBottom = log.scrollHeight - log.scrollTop - log.clientHeight < 120;
   document.documentElement.style.setProperty('--appH', Math.round(h) + 'px');
   $('#room').style.top = isMobile() && vv ? Math.round(vv.offsetTop) + 'px' : '';
-  if (atBottom) log.scrollTop = log.scrollHeight;
+  if (stick) log.scrollTop = log.scrollHeight;
 }
 if (window.visualViewport) { visualViewport.addEventListener('resize', fitViewport); visualViewport.addEventListener('scroll', fitViewport); }
 window.addEventListener('resize', fitViewport);
@@ -1045,14 +1093,14 @@ function renderToggle(s){
 }
 
 /* ================= 루미큐브 화면 ================= */
-let W = null, wTurn = -1, sel = new Set(), rackSort = 'num', draftT = null;
+let W = null, wTurn = -1, selId = null, rackSort = 'num', rackOrder = [], draftT = null, drag = null, noClickUntil = 0;
 try { rackSort = localStorage.getItem('rk_sort') || 'num'; } catch(e){}
 function rkMine(s){ return s.phase === 'rk' && s.rk && s.rk.cur === s.me; }
 function rkSync(s){
-  if (!s.rk || !rkMine(s)) { W = null; wTurn = -1; sel.clear(); return; }
+  if (!s.rk || !rkMine(s)) { W = null; wTurn = -1; return; }
   if (!W || wTurn !== s.rk.turnNo || !W.dirty) {
-    W = { table: s.rk.table.map(a => a.slice()), rack: s.rk.rack.slice(), rack0: new Set(s.rk.rack) };
-    if (wTurn !== s.rk.turnNo) sel.clear();
+    W = { cells: s.rk.cells.map(a => a.slice()), rack: s.rk.rack.slice(), rack0: new Set(s.rk.rack) };
+    if (wTurn !== s.rk.turnNo) selId = null;
     wTurn = s.rk.turnNo;
   }
 }
@@ -1060,64 +1108,98 @@ function sortRack(ids){
   const k = id => { const t = tileOf(id); return t.j ? [9, 99] : rackSort === 'num' ? [t.n, t.c] : [t.c, t.n]; };
   return ids.slice().sort((a, b) => { const x = k(a), y = k(b); return x[0] - y[0] || x[1] - y[1] || a - b; });
 }
-function rkSendDraft(){ clearTimeout(draftT); draftT = setTimeout(() => { if (W) send({ type:'rk_draft', table: W.table }); }, 120); }
-function rkMove(target){       // target: 세트 번호, 'new', 'rack'
-  if (!W || !sel.size) return;
-  let ids = [...sel];
-  if (target === 'rack') {
-    const back = ids.filter(id => W.rack0.has(id) && !W.rack.includes(id));
-    if (back.length < ids.filter(id => !W.rack.includes(id)).length) rkFlash('원래 테이블에 있던 타일은 내 패로 가져올 수 없어요.', true);
-    ids = back;
-    if (!ids.length) { sel.clear(); return renderRK(S); }
+function rackView(rack){
+  if (rackSort !== 'free') return sortRack(rack);
+  rackOrder = rackOrder.filter(id => rack.includes(id));
+  rack.forEach(id => { if (!rackOrder.includes(id)) rackOrder.push(id); });
+  return rackOrder.slice();
+}
+function setSort(m){
+  if (m === 'free' && rackSort !== 'free') rackOrder = sortRack(curRack());
+  rackSort = m; try { localStorage.setItem('rk_sort', m); } catch(_){}
+}
+const curRack = () => W ? W.rack : (S && S.rk ? S.rk.rack : []);
+function rkSendDraft(){ clearTimeout(draftT); draftT = setTimeout(() => { if (W) send({ type:'rk_draft', cells: W.cells }); }, 120); }
+const cellAt = (cells, r, c) => cells.find(t => t[1] === r && t[2] === c);
+function takeTile(id){
+  const i = W.cells.findIndex(t => t[0] === id); if (i >= 0) { W.cells.splice(i, 1); return; }
+  const j = W.rack.indexOf(id); if (j >= 0) W.rack.splice(j, 1);
+}
+// 원하는 칸에 직접 놓기. 그 칸에 타일이 있으면 오른쪽으로 한 칸씩 밀어요.
+function placeTile(id, r, c){
+  if (!W) return rkFlash('내 차례에만 테이블에 놓을 수 있어요.', true);
+  const occ = cellAt(W.cells, r, c);
+  if (occ && occ[0] === id) { selId = null; return renderRK(S); }
+  const snap = { cells: W.cells.map(a => a.slice()), rack: W.rack.slice() };
+  takeTile(id);
+  if (cellAt(W.cells, r, c)) {
+    let e = c; while (e < RK_COLS && cellAt(W.cells, r, e)) e++;
+    if (e >= RK_COLS) { W.cells = snap.cells; W.rack = snap.rack; return rkFlash('그 줄에 빈 칸이 없어요.', true); }
+    W.cells.forEach(t => { if (t[1] === r && t[2] >= c && t[2] < e) t[2]++; });
   }
-  const dest = typeof target === 'number' ? W.table[target] : null;
-  W.table.forEach(set => { for (let i = set.length - 1; i >= 0; i--) if (ids.includes(set[i])) set.splice(i, 1); });
-  W.rack = W.rack.filter(id => !ids.includes(id));
-  if (target === 'rack') W.rack.push(...ids);
-  else if (target === 'new') W.table.push(ids);
-  else dest.push(...ids);
-  W.table = W.table.filter(a => a.length).map(a => setInfo(a).order);
-  W.dirty = true;
-  sel.clear(); rkSendDraft(); renderRK(S);
+  W.cells.push([id, r, c]);
+  W.dirty = true; selId = null; rkSendDraft(); renderRK(S);
+}
+function reorderRack(id, beforeId){
+  const cur = rackView(curRack());
+  setSort('free');
+  rackOrder = cur.filter(x => x !== id);
+  let at = beforeId == null ? rackOrder.length : rackOrder.indexOf(beforeId);
+  if (at < 0) at = rackOrder.length;
+  rackOrder.splice(at, 0, id);
+}
+function toRack(id, beforeId){
+  if (curRack().includes(id)) { reorderRack(id, beforeId); selId = null; return renderRK(S); }
+  if (!W) return;
+  if (!W.rack0.has(id)) return rkFlash('원래 테이블에 있던 타일은 내 패로 가져올 수 없어요.', true);
+  takeTile(id); W.rack.push(id);
+  reorderRack(id, beforeId);
+  W.dirty = true; selId = null; rkSendDraft(); renderRK(S);
 }
 let flashT = null;
 function rkFlash(t, bad){ const el = $('#rkMsg'); el.textContent = t; el.className = 'rkmsg' + (bad ? ' bad' : ''); clearTimeout(flashT); flashT = setTimeout(() => { el.textContent = ''; }, 3500); }
 function rkCheck(){             // 내 차례 진행 상황 점검 (방장도 같은 규칙으로 다시 검사해요)
-  const played = W.table.flat().filter(id => W.rack0.has(id));
-  const bad = W.table.filter(a => !setInfo(a).ok).length;
+  const sets = setsFromCells(W.cells);
+  const played = W.cells.map(t => t[0]).filter(id => W.rack0.has(id));
+  const bad = sets.filter(a => !setInfo(a).ok).length;
   const melded = S.rk.melded[S.me];
   let meld = 0;
-  if (!melded) W.table.forEach(a => { if (a.some(id => W.rack0.has(id))) { const i = setInfo(a); if (i.ok) meld += i.value; } });
+  if (!melded) sets.forEach(a => { if (a.some(id => W.rack0.has(id))) { const i = setInfo(a); if (i.ok) meld += i.value; } });
   let why = '';
   if (!played.length) why = '타일을 1장 이상 내려놓아야 해요';
-  else if (bad) why = `올바르지 않은 세트가 ${bad}개 있어요`;
+  else if (bad) why = `올바르지 않은 세트가 ${bad}개 있어요 (빨간 타일)`;
   else if (!melded && meld < 30) why = `첫 등록은 30점 이상 (지금 ${meld}점)`;
   return { played, bad, meld, melded, why };
 }
 function renderRK(s){
   const rk = s.rk; if (!rk) return;
+  if (drag && drag.moved) return;          // 끌고 있는 동안에는 화면을 다시 그리지 않아요
   rkSync(s);
   const mine = rkMine(s);
   const name = id => (s.players.find(p => p.id === id) || {}).name || '?';
-  const table = W ? W.table : (rk.draft || rk.table);
+  const cells = W ? W.cells : (rk.draft || rk.cells);
   const rack = W ? W.rack : rk.rack;
   $('#rkTurn').textContent = s.phase === 'end' ? '🏁 게임 종료' : mine ? '🔢 내 차례!' : `⏳ ${name(rk.cur)}님 차례${rk.draft ? ' · 배치 중...' : ''}`;
   $('#rkTurn').className = 'turn' + (mine ? ' mine' : '');
   $('#rkPool').textContent = `남은 타일 더미 ${rk.pool}장`;
-  // 테이블
-  const canDrop = mine && sel.size;
-  let bh = table.map((set, i) => {
-    const info = setInfo(set);
-    return `<div class="rkset ${info.ok ? '' : 'bad'}" data-set="${i}">${set.map(id => tileHTML(id, (sel.has(id) ? 'sel ' : '') + (W && W.rack0.has(id) ? 'fresh' : ''))).join('')}${canDrop ? `<div class="slot" data-drop="${i}">＋</div>` : ''}</div>`;
-  }).join('');
-  if (canDrop) bh += `<div class="newset" data-drop="new">＋ 새 세트 만들기</div>`;
-  if (!table.length && !canDrop) bh = `<div class="empty">${mine ? '내 타일을 눌러 고른 뒤, ＋ 새 세트 만들기를 누르세요' : '아직 테이블에 타일이 없어요'}</div>`;
+  // 테이블: 칸이 있는 판
+  const bad = new Set();
+  setsFromCells(cells).forEach(a => { if (!setInfo(a).ok) a.forEach(id => bad.add(id)); });
+  const map = {}; cells.forEach(t => { map[t[1] + ',' + t[2]] = t[0]; });
+  const maxR = cells.reduce((m, t) => Math.max(m, t[1]), -1);
+  const rows = Math.min(RK_MAXROWS, Math.max(mine ? 6 : 4, maxR + (mine ? 3 : 2)));
+  let bh = '';
+  for (let r = 0; r < rows; r++) for (let c = 0; c < RK_COLS; c++) {
+    const id = map[r + ',' + c];
+    bh += id === undefined ? `<div class="cell empty" data-r="${r}" data-c="${c}"></div>`
+      : `<div class="cell" data-r="${r}" data-c="${c}">${tileHTML(id, (selId === id ? 'sel ' : '') + (W && W.rack0.has(id) ? 'fresh ' : '') + (bad.has(id) ? 'bad' : ''))}</div>`;
+  }
   $('#rkBoard').innerHTML = bh;
+  $('#rkBoard').classList.toggle('mine', mine);
   // 내 패
-  const backable = mine && [...sel].some(id => W.rack0.has(id) && !W.rack.includes(id));
-  $('#rkRack').innerHTML = sortRack(rack).map(id => tileHTML(id, sel.has(id) ? 'sel' : '')).join('') + (backable ? `<div class="slot" data-drop="rack" title="내 패로 돌려놓기">↩</div>` : '');
+  $('#rkRack').innerHTML = rackView(rack).map(id => tileHTML(id, selId === id ? 'sel' : '')).join('');
   $('#rkCount').textContent = rack.length + '장';
-  $('#sortNum').classList.toggle('on', rackSort === 'num'); $('#sortCol').classList.toggle('on', rackSort === 'col');
+  $('#sortNum').classList.toggle('on', rackSort === 'num'); $('#sortCol').classList.toggle('on', rackSort === 'col'); $('#sortFree').classList.toggle('on', rackSort === 'free');
   // 버튼
   let act = '';
   if (mine) {
@@ -1127,33 +1209,88 @@ function renderRK(s){
       <button data-rk="commit" ${c.why ? 'disabled' : ''} title="${esc(c.why)}">✅ 턴 완료</button>
       <button class="ghost" data-rk="draw">${rk.pool ? '📥 뽑고 넘기기' : '⏭️ 패스'}</button>`;
     if (c.why && c.played.length) act += `<div style="width:100%;font-size:12.5px;color:#ff8f8a">${esc(c.why)}</div>`;
-    else if (!c.played.length) act += `<div style="width:100%;font-size:12.5px;color:var(--muted)">타일을 눌러 고르고(여러 장 가능), 테이블의 ＋ 를 눌러 놓으세요.</div>`;
+    else if (!c.played.length) act += `<div style="width:100%;font-size:12.5px;color:var(--muted)">타일을 끌어서 원하는 칸에 놓으세요. 가로로 붙은 타일끼리 한 세트가 돼요. 테이블 타일도 끌어서 다시 조합할 수 있어요.</div>`;
   } else {
     $('#rkMeld').textContent = rk.melded[s.me] ? '등록 완료 ✓' : '첫 등록 전 (30점 필요)';
-    act = s.phase === 'end' ? '' : `<div style="font-size:13px;color:var(--muted)">기다리는 동안 내 타일 정렬을 바꾸거나 채팅할 수 있어요.</div>`;
+    act = s.phase === 'end' ? '' : `<div style="font-size:13px;color:var(--muted)">기다리는 동안 내 타일을 끌어서 마음대로 정리할 수 있어요.</div>`;
   }
   $('#rkActions').innerHTML = act;
 }
+// 클릭(탭): 타일을 고른 뒤 빈 칸이나 내 패를 눌러 옮기기 (끌기가 어려울 때)
 $('#rkArea').addEventListener('click', e => {
+  if (Date.now() < noClickUntil) return;
   const b = e.target.closest('[data-rk]');
   if (b && !b.disabled) {
     const a = b.dataset.rk;
-    if (a === 'sortnum' || a === 'sortcol') { rackSort = a === 'sortnum' ? 'num' : 'col'; try { localStorage.setItem('rk_sort', rackSort); } catch(_){} return renderRK(S); }
+    if (a === 'sortnum' || a === 'sortcol' || a === 'sortfree') { setSort(a === 'sortnum' ? 'num' : a === 'sortcol' ? 'col' : 'free'); return renderRK(S); }
     if (!W) return;
-    if (a === 'reset') { W = null; wTurn = -1; sel.clear(); send({ type:'rk_draft', table: null }); return renderRK(S); }
-    if (a === 'commit') { send({ type:'rk_commit', table: W.table }); return; }
+    if (a === 'reset') { W = null; wTurn = -1; selId = null; send({ type:'rk_draft', cells: null }); return renderRK(S); }
+    if (a === 'commit') { send({ type:'rk_commit', cells: W.cells }); return; }
     if (a === 'draw') { send({ type:'rk_draw' }); return; }
+    return;
   }
-  const d = e.target.closest('[data-drop]');
-  if (d) { const v = d.dataset.drop; return rkMove(v === 'new' || v === 'rack' ? v : Number(v)); }
-  const t = e.target.closest('.tile');
-  if (t && W) {
+  const t = e.target.closest('.tile'), cell = e.target.closest('#rkBoard .cell'), inRack = e.target.closest('.rackWrap');
+  if (t) {
     const id = Number(t.dataset.tid);
-    if (!W.rack.includes(id) && !W.table.flat().includes(id)) return;
-    sel.has(id) ? sel.delete(id) : sel.add(id);
+    if (!W && !t.closest('#rkRack')) return;
+    selId = selId === id ? null : id;
     return renderRK(S);
   }
+  if (selId != null && cell && cell.classList.contains('empty')) return placeTile(selId, Number(cell.dataset.r), Number(cell.dataset.c));
+  if (selId != null && inRack) return toRack(selId, null);
 });
+// 끌어다 놓기 (마우스·터치 모두)
+function dropTargetAt(x, y){
+  const el = document.elementFromPoint(x, y);
+  return el ? { el, rackTile: el.closest('#rkRack .tile'), rack: el.closest('.rackWrap'), cell: el.closest('#rkBoard .cell') } : null;
+}
+let overEl = null;
+function setOver(el){ if (overEl === el) return; if (overEl) overEl.classList.remove('over'); overEl = el; if (el) el.classList.add('over'); }
+$('#rkArea').addEventListener('pointerdown', e => {
+  if (e.button > 0) return;
+  const t = e.target.closest('.tile'); if (!t || !S || !S.rk) return;
+  const inRack = !!t.closest('#rkRack');
+  if (!inRack && !W) return;
+  drag = { id: Number(t.dataset.tid), t, sx: e.clientX, sy: e.clientY, moved: false, ghost: null };
+});
+window.addEventListener('pointermove', e => {
+  if (!drag) return;
+  if (!drag.moved) {
+    if (Math.hypot(e.clientX - drag.sx, e.clientY - drag.sy) < 6) return;
+    drag.moved = true;
+    const r = drag.t.getBoundingClientRect();
+    const g = drag.t.cloneNode(true); g.classList.remove('sel'); g.classList.add('dragGhost');
+    g.style.width = r.width + 'px'; g.style.height = r.height + 'px'; g.style.fontSize = getComputedStyle(drag.t).fontSize;
+    document.body.appendChild(g); drag.ghost = g; drag.t.classList.add('dragging');
+  }
+  drag.ghost.style.left = e.clientX + 'px'; drag.ghost.style.top = e.clientY + 'px';
+  const d = dropTargetAt(e.clientX, e.clientY);
+  setOver(d && (d.cell || d.rackTile) || null);
+  e.preventDefault();
+}, { passive:false });
+function endDrag(e, cancel){
+  if (!drag) return;
+  const d0 = drag; drag = null; setOver(null);
+  if (!d0.moved) return;
+  d0.ghost.remove(); d0.t.classList.remove('dragging');
+  noClickUntil = Date.now() + 350;
+  if (cancel) return renderRK(S);
+  const d = dropTargetAt(e.clientX, e.clientY);
+  if (!d) return renderRK(S);
+  if (d.rackTile) {
+    const tid = Number(d.rackTile.dataset.tid);
+    if (tid === d0.id) return renderRK(S);
+    const r = d.rackTile.getBoundingClientRect(), after = e.clientX > r.left + r.width / 2;
+    const order = rackView(curRack()).filter(z => z !== d0.id);
+    const before = order[order.indexOf(tid) + (after ? 1 : 0)];
+    return toRack(d0.id, before === undefined ? null : before);
+  }
+  if (d.rack) return toRack(d0.id, null);
+  if (d.cell) return placeTile(d0.id, Number(d.cell.dataset.r), Number(d.cell.dataset.c));
+  renderRK(S);
+}
+window.addEventListener('pointerup', e => endDrag(e, false));
+window.addEventListener('pointercancel', e => endDrag(e, true));
 function showRKResult(s){
   const rk = s.rk; if (!rk || !rk.scores) return;
   const win = s.winner === s.me;
@@ -1174,7 +1311,7 @@ function renderRKPage(s){
   $('#phase').textContent = s.phase === 'end' ? '🏁 게임 종료' : '🔢 루미큐브';
   const wasRk = $('#main').classList.contains('rk');
   $('#main').classList.remove('lobby'); $('#main').classList.add('rk');
-  if (!wasRk) setTimeout(() => { const l = $('#log'); l.scrollTop = l.scrollHeight; }, 50);   // 화면 배치가 바뀌면 채팅을 맨 아래로
+  if (!wasRk) setTimeout(logToBottom, 50);   // 화면 배치가 바뀌면 채팅을 맨 아래로
   $('#configSide').classList.add('hidden');
   $('#btnCard').classList.add('hidden');
   const rk = s.rk;
@@ -1215,7 +1352,7 @@ function render(){
   // 안내
   const err = s.phase === 'lobby' ? lobbyErr(s) : '';
   let hint = '';
-  if (s.phase === 'lobby') hint = isHost ? (err || '준비되면 게임을 시작하세요.') : `방장이 게임을 시작할 때까지 기다려 주세요. (${n}명 참가 중)`;
+  if (s.phase === 'lobby') hint = isHost ? (err || '준비되면 게임을 시작하세요.') + ' 📌 친구들이 다 들어올 때까지 이 화면을 켜 두세요.' : `방장이 게임을 시작할 때까지 기다려 주세요. (${n}명 참가 중)`;
   else if (s.phase === 'end') hint = '게임이 끝났어요. 모든 직업이 공개되었어요.';
   else if (!s.alive) hint = '👻 당신은 죽었어요. 게임을 지켜보세요.';
   else if (s.phase === 'day') hint = '토론하며 마피아를 추리하세요.';
@@ -1398,12 +1535,18 @@ function deliver(pid, m){
   else pub(T('/to/' + pid), m);
 }
 // 연결 확인: 응답이 오래 없거나 연결이 끊긴 뒤 15초 안에 돌아오지 않으면 퇴장 처리
+let lastCheck = Date.now();
 setInterval(() => {
   if (!isHost) return;
   const now = Date.now();
+  if (now - lastCheck > 10000) {        // 방장 화면이 멈춰 있었던 경우: 그동안 못 받은 신호로 사람들을 내보내지 않도록 초기화
+    H.players.forEach(p => { lastSeen[p.id] = now; delete byeAt[p.id]; });
+  }
+  lastCheck = now;
   H.players.slice().forEach(p => {
     if (p.id === myId || !p.online) return;
-    if (now - (lastSeen[p.id] || now) > 60000 || (byeAt[p.id] && now - byeAt[p.id] > 15000)) hostLeave(p.id);
+    // 다른 앱을 잠깐 다녀와도 괜찮도록 넉넉하게 기다려요
+    if (now - (lastSeen[p.id] || now) > 150000 || (byeAt[p.id] && now - byeAt[p.id] > 90000)) hostLeave(p.id);
   });
 }, 3000);
 function toWhere(fn, m){ H.players.forEach(p => { if (p.online && fn(p)) deliver(p.id, m); }); }
@@ -1541,10 +1684,10 @@ function hostHandle(pid, m){
       return;
     }
     case 'rk_draft':
-      if (H.phase === 'rk' && pid === rkCur()) { RK.draft = m.table === null ? null : rkClean(m.table); broadcastState(); }
+      if (H.phase === 'rk' && pid === rkCur()) { RK.draft = m.cells === null ? null : rkClean(m.cells); broadcastState(); }
       return;
     case 'rk_commit':
-      if (H.phase === 'rk' && pid === rkCur()) rkCommit(pid, m.table);
+      if (H.phase === 'rk' && pid === rkCur()) rkCommit(pid, m.cells);
       return;
     case 'rk_draw':
       if (H.phase === 'rk' && pid === rkCur()) rkDraw(pid, false);
@@ -1794,19 +1937,20 @@ function shuffle(a){ for (let i = a.length - 1; i > 0; i--) { const j = Math.flo
 const rkCur = () => RK.order ? RK.order[RK.turn] : null;
 function rkView(p){
   return {
-    table: RK.table, draft: RK.draft, rack: RK.racks[p.id] || [], pool: RK.pool.length,
+    cells: RK.cells, draft: RK.draft, rack: RK.racks[p.id] || [], pool: RK.pool.length,
     counts: Object.fromEntries(RK.order.map(id => [id, RK.racks[id].length])),
     order: RK.order, cur: rkCur(), turnNo: RK.turnNo, melded: RK.melded, scores: RK.scores
   };
 }
-function rkClean(t){
-  if (!Array.isArray(t) || t.length > 60) return null;
-  const out = [];
-  for (const set of t) {
-    if (!Array.isArray(set) || set.length > 13) return null;
-    const a = set.map(Number);
-    if (a.some(x => !Number.isInteger(x) || x < 0 || x > 105)) return null;
-    if (a.length) out.push(a);
+function rkClean(t){        // [타일, 줄, 칸] 목록 검사
+  if (!Array.isArray(t) || t.length > 106) return null;
+  const ids = new Set(), pos = new Set(), out = [];
+  for (const x of t) {
+    if (!Array.isArray(x) || x.length !== 3) return null;
+    const [id, r, c] = x.map(Number);
+    if (![id, r, c].every(Number.isInteger) || id < 0 || id > 105 || r < 0 || r >= RK_MAXROWS || c < 0 || c >= RK_COLS) return null;
+    if (ids.has(id) || pos.has(r + ',' + c)) return null;
+    ids.add(id); pos.add(r + ',' + c); out.push([id, r, c]);
   }
   return out;
 }
@@ -1814,7 +1958,7 @@ function rkStart(){
   const ids = shuffle([...Array(106).keys()]);
   RK.order = shuffle(H.players.map(p => p.id));
   RK.racks = {}; RK.order.forEach(id => { RK.racks[id] = ids.splice(0, 14); });
-  RK.pool = ids; RK.table = []; RK.melded = {}; RK.passes = 0; RK.turn = 0; RK.turnNo = 0; RK.draft = null; RK.scores = null;
+  RK.pool = ids; RK.cells = []; RK.melded = {}; RK.passes = 0; RK.turn = 0; RK.turnNo = 0; RK.draft = null; RK.scores = null;
   H.phase = 'rk'; H.winner = null;
   mc(`🔢 루미큐브를 시작합니다! 순서: ${RK.order.map(id => P(id).name).join(' → ')}. 첫 등록은 내 타일로만 30점 이상이에요. 행운을 빌어요!`);
   rkBeginTurn();
@@ -1851,8 +1995,9 @@ function rkDraw(pid, timeout){
 }
 function rkCommit(pid, raw){
   const fail = t => deliver(pid, { type:'error', text: '❌ ' + t });
-  const table = rkClean(raw); if (!table) return fail('잘못된 배치예요.');
-  const rack = RK.racks[pid], flat = table.flat(), old = RK.table.flat();
+  const cells = rkClean(raw); if (!cells) return fail('잘못된 배치예요.');
+  const table = setsFromCells(cells), oldTable = setsFromCells(RK.cells);
+  const rack = RK.racks[pid], flat = table.flat(), old = oldTable.flat();
   const before = new Set([...old, ...rack]);
   if (new Set(flat).size !== flat.length || flat.some(id => !before.has(id))) return fail('잘못된 타일이 있어요.');
   const fs = new Set(flat);
@@ -1863,7 +2008,7 @@ function rkCommit(pid, raw){
   if (infos.some(i => !i.ok)) return fail('올바르지 않은 세트가 있어요.');
   if (!RK.melded[pid]) {
     const key = a => a.slice().sort((x, y) => x - y).join(',');
-    const oldKeys = RK.table.map(key);
+    const oldKeys = oldTable.map(key);
     const pset = new Set(played);
     let pts = 0;
     for (let i = 0; i < table.length; i++) {
@@ -1879,7 +2024,7 @@ function rkCommit(pid, raw){
     }
     if (pts < 30) return fail(`첫 등록은 30점 이상이어야 해요. (지금 ${pts}점)`);
   }
-  RK.table = infos.map(i => i.order);
+  RK.cells = cells;
   const ps = new Set(played);
   RK.racks[pid] = rack.filter(id => !ps.has(id));
   const first = !RK.melded[pid];
