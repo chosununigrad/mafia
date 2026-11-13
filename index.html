@@ -19,16 +19,18 @@
   button{font:inherit;cursor:pointer;border:0;border-radius:8px;padding:10px 14px;background:var(--accent);color:#1b1b1b;font-weight:700}
   button.ghost{background:transparent;color:var(--text);border:1px solid var(--line);font-weight:500}
   button:disabled{opacity:.4;cursor:not-allowed}
-  input{font:inherit;padding:11px 12px;border-radius:8px;border:1px solid var(--line);background:var(--panel2);color:var(--text);width:100%}
+  input,select{font:inherit;padding:11px 12px;border-radius:8px;border:1px solid var(--line);background:var(--panel2);color:var(--text);width:100%}
+  select{padding:6px 8px;width:auto}
   input:focus{outline:2px solid var(--accent);border-color:transparent}
   .hidden{display:none!important}
 
-  /* Home */
-  #home{max-width:420px;margin:0 auto;padding:60px 20px}
+  /* 시작 화면 */
+  #home{max-width:440px;margin:0 auto;padding:60px 20px}
   #home h1{font-size:40px;margin:0 0 6px;text-align:center}
   #home .sub{color:var(--muted);text-align:center;margin-bottom:32px}
-  .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px;margin-bottom:14px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:14px}
   .card label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px}
+  .card h3{margin:0 0 10px;font-size:16px}
   .row{display:flex;gap:8px}
   .row input{flex:1}
   #homeErr{color:var(--red);text-align:center;min-height:22px;margin-top:8px}
@@ -36,15 +38,15 @@
   .rules{font-size:13px;color:var(--muted);line-height:1.7}
   .rules b{color:var(--text)}
 
-  /* Room */
-  #room{max-width:1100px;margin:0 auto;padding:14px;display:flex;flex-direction:column;height:100vh}
+  /* 게임 화면 */
+  #room{max-width:1150px;margin:0 auto;padding:14px;display:flex;flex-direction:column;height:100vh}
   header{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:12px}
   #phase{font-size:20px;font-weight:800}
   #timer{font-size:28px;font-weight:800;font-variant-numeric:tabular-nums;color:var(--accent);margin-left:auto}
   .code{background:var(--panel2);border:1px solid var(--line);padding:6px 10px;border-radius:8px;font-size:14px}
   .code b{letter-spacing:2px;color:var(--accent)}
-  main{display:grid;grid-template-columns:320px 1fr;gap:12px;flex:1;min-height:0}
-  aside{display:flex;flex-direction:column;gap:12px;min-height:0;overflow:auto}
+  main{display:grid;grid-template-columns:340px 1fr;gap:12px;flex:1;min-height:0}
+  aside{display:flex;flex-direction:column;min-height:0;overflow:auto}
   #roleCard{text-align:center}
   #roleCard .icon{font-size:46px}
   #roleCard .rname{font-size:22px;font-weight:800;margin:4px 0}
@@ -53,33 +55,49 @@
   .deadTag{display:inline-block;margin-top:8px;background:var(--red);color:#fff;border-radius:6px;padding:2px 8px;font-size:12px}
   #hint{font-size:14px;color:var(--accent);margin-bottom:8px;min-height:20px}
   #players{list-style:none;margin:0;padding:0}
-  #players li{display:flex;align-items:center;gap:8px;padding:8px 6px;border-bottom:1px solid var(--line)}
+  #players li{display:flex;align-items:center;gap:6px;padding:8px 4px;border-bottom:1px solid var(--line)}
   #players li:last-child{border-bottom:0}
   #players .pname{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   #players li.dead .pname{text-decoration:line-through;color:var(--muted)}
-  #players li.off .pname{color:var(--muted)}
   .badge{font-size:11px;padding:2px 6px;border-radius:5px;background:var(--panel2);color:var(--muted);white-space:nowrap}
-  .badge.mafia{background:var(--red);color:#fff}
-  .badge.doctor{background:var(--green);color:#fff}
-  .badge.police{background:var(--blue);color:#fff}
-  .badge.citizen{background:#777;color:#fff}
+  .badge.t-mafia{background:var(--red);color:#fff}
+  .badge.t-special{background:var(--blue);color:#fff}
+  .badge.t-citizen{background:#777;color:#fff}
   .badge.me{background:var(--accent);color:#222}
   .votes{font-weight:800;color:var(--red);min-width:28px;text-align:right}
   #players button{padding:5px 10px;font-size:13px}
   #players button.sel{background:var(--red);color:#fff}
-  #hostBox button{width:100%;margin-top:6px}
+  #hostBox button{width:100%;margin-top:8px}
   #hostBox .note{font-size:12px;color:var(--muted);margin-top:6px;text-align:center}
+  #compo{font-size:12px;color:var(--muted);margin-top:10px;line-height:1.6}
 
+  /* 역할 설정 */
+  .cfgrow{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--line)}
+  .cfgrow:last-of-type{border-bottom:0}
+  .cfgrow .ri{font-size:22px;width:28px;text-align:center}
+  .cfgrow .rinfo{flex:1;min-width:0}
+  .cfgrow .rinfo b{font-size:14px}
+  .cfgrow .rinfo small{display:block;color:var(--muted);font-size:11.5px;line-height:1.4}
+  .cfgrow .cnt{min-width:22px;text-align:center;font-weight:800;font-size:16px}
+  .cfgrow button{padding:2px 10px;font-size:16px;line-height:1.4}
+  .durs{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px;font-size:13px;color:var(--muted);align-items:center}
+  #cfgErr{color:var(--red);font-size:13px;margin-top:8px;min-height:18px}
+
+  /* 채팅 */
   .chat{display:flex;flex-direction:column;min-height:0}
   #log{flex:1;overflow-y:auto;padding:4px 2px;min-height:200px}
   .msg{padding:5px 8px;border-radius:8px;margin:3px 0;line-height:1.45;word-break:break-word;font-size:15px}
   .msg .who{font-weight:700;margin-right:6px}
   .msg.mine .who{color:var(--accent)}
-  .msg.sys{background:var(--panel2);color:var(--text);font-size:14px;text-align:center}
+  .msg.mc{background:var(--panel2);border-left:4px solid var(--accent);font-size:14.5px;margin:6px 0}
+  .msg.mc .who{color:var(--accent)}
+  .msg.mc.private{border-left-color:var(--blue);background:rgba(90,141,238,.15)}
+  .msg.mc.private .who{color:var(--blue)}
   .msg.err{color:var(--red);text-align:center;font-size:13px}
-  .msg.private{background:rgba(90,141,238,.18);border:1px solid var(--blue);font-size:14px}
   .msg.ch-mafia{background:rgba(226,85,79,.15)}
   .msg.ch-mafia .tag{color:var(--red)}
+  .msg.ch-lover{background:rgba(232,110,170,.14)}
+  .msg.ch-lover .tag{color:#e86eaa}
   .msg.ch-dead{background:rgba(167,125,232,.13);color:#cfc3e8}
   .msg.ch-dead .tag{color:var(--purple)}
   .tag{font-size:11px;font-weight:700;margin-right:4px}
@@ -87,7 +105,7 @@
   #chatForm input{flex:1}
   #chanLabel{font-size:12px;color:var(--muted);margin-top:8px}
 
-  @media (max-width:760px){
+  @media (max-width:780px){
     #room{height:auto;min-height:100vh}
     main{grid-template-columns:1fr}
     #log{height:45vh;flex:none}
@@ -118,14 +136,12 @@
   <div id="homeErr"></div>
 
   <div class="card rules">
-    <b>게임 규칙</b><br>
-    · 4~12명. 시작하면 역할이 무작위로 정해져요.<br>
-    · <b>낮(2분)</b> 모두 채팅으로 토론하며 마피아를 추리해요.<br>
-    · <b>저녁(30초)</b> 투표로 한 명을 처형해요. 동점이면 아무도 죽지 않아요.<br>
-    · <b>밤(30초)</b> 마피아는 한 명을 지목하고(마피아끼리 비밀 채팅), 의사는 한 명을 살리고, 경찰은 한 명을 조사해요.<br>
-    · 마피아가 모두 죽으면 <b>시민 승리</b>, 마피아 수가 나머지와 같아지면 <b>마피아 승리</b>.<br>
-    · 죽은 사람은 죽은 사람끼리만 대화할 수 있어요.<br>
-    · 마피아 수: 4~5명 1명 / 6~8명 2명 / 9명 이상 3명
+    <b>게임 진행</b> (🎙️ 사회자가 진행해요)<br>
+    · <b>낮</b> 모두 채팅으로 토론하며 마피아를 추리해요.<br>
+    · <b>투표</b> 처형할 사람에게 투표해요. 모두 투표하면 바로 넘어가요. 동점이면 아무도 죽지 않아요.<br>
+    · <b>밤</b> 마피아끼리 비밀 채팅으로 상의해서 한 명을 제거해요. 다른 능력자들도 능력을 써요.<br>
+    · 마피아가 모두 죽으면 <b>시민 승리</b>, 마피아 팀 수가 나머지와 같아지면 <b>마피아 승리</b>.<br>
+    · 역할 구성(마피아·스파이·배신자·의사·경찰·군인·정치인·영매·기자·건달·연인)과 시간은 방장이 대기실에서 정해요.
   </div>
 </section>
 
@@ -145,7 +161,9 @@
         <div id="hint"></div>
         <ul id="players"></ul>
         <div id="hostBox"></div>
+        <div id="compo"></div>
       </div>
+      <div class="card" id="configCard"></div>
     </aside>
     <div class="card chat">
       <div id="log"></div>
@@ -160,25 +178,64 @@
 
 <script>
 /* ================= 설정 ================= */
-const PREFIX = 'mafia-game-kr-v1-';
-const DUR = { day: 120, vote: 30, night: 30 };      // 초
+const PREFIX = 'mafia-game-kr-v2-';
 const SPEED = parseFloat(new URLSearchParams(location.search).get('speed')) || 1; // 테스트용 배속
 const MAX_PLAYERS = 12;
+const DUR_OPTS = { day:[60,90,120,180,240,300], vote:[20,30,45,60], night:[20,30,45,60,90] };
+const MC = '🎙️ 사회자';
 
 const ROLE = {
-  mafia:   { name:'마피아', icon:'🔪', desc:'밤마다 한 명을 골라 제거하세요. 밤에는 마피아끼리만 비밀 채팅을 할 수 있어요. 정체를 숨기세요!' },
-  doctor:  { name:'의사',   icon:'💉', desc:'밤마다 한 명을 치료하세요. 마피아가 그 사람을 노리면 살려낼 수 있어요. 자신도 치료할 수 있어요.' },
-  police:  { name:'경찰',   icon:'🔍', desc:'밤마다 한 명을 조사해 마피아인지 바로 알 수 있어요. 결과는 나만 볼 수 있어요.' },
-  citizen: { name:'시민',   icon:'👤', desc:'특별한 능력은 없어요. 낮 토론과 투표로 마피아를 찾아내세요!' }
+  mafia:      { name:'마피아', icon:'🔪', team:'mafia',   max:4, desc:'밤마다 마피아끼리 비밀 채팅으로 상의해 한 명을 제거해요.' },
+  spy:        { name:'스파이', icon:'🕶️', team:'mafia',   max:1, desc:'마피아 팀. 밤마다 한 명의 정확한 직업을 알아내요. 마피아를 찾으면 접선해서 마피아 채팅에 합류해요.' },
+  traitor:    { name:'배신자', icon:'🐍', team:'mafia',   max:1, desc:'마피아 팀이지만 능력은 없어요. 나는 마피아가 누군지 알지만 마피아는 나를 몰라요. 경찰 조사에선 시민으로 나와요. 시민인 척 마피아를 도우세요!' },
+  doctor:     { name:'의사',   icon:'💉', team:'special', max:1, desc:'밤마다 한 명을 치료해요. 마피아가 그 사람을 노리면 살려내요. 자신도 치료할 수 있어요.' },
+  police:     { name:'경찰',   icon:'🔍', team:'special', max:1, desc:'밤마다 한 명을 조사해 마피아인지 바로 알아내요. (스파이는 마피아로 나오지 않아요)' },
+  soldier:    { name:'군인',   icon:'🪖', team:'special', max:1, desc:'마피아의 공격을 한 번 버텨낼 수 있어요.' },
+  politician: { name:'정치인', icon:'🎩', team:'special', max:1, desc:'투표로 처형되지 않고, 내 투표는 2표로 계산돼요.' },
+  medium:     { name:'영매',   icon:'🔮', team:'special', max:1, desc:'죽은 사람들의 대화를 항상 볼 수 있고, 밤에는 그들과 대화할 수 있어요.' },
+  reporter:   { name:'기자',   icon:'📰', team:'special', max:1, desc:'게임 중 한 번, 밤에 한 명을 취재해 다음 날 아침 그 사람의 직업을 모두에게 공개해요. 그날 밤 기자가 죽으면 무산돼요.' },
+  gangster:   { name:'건달',   icon:'👊', team:'special', max:1, desc:'밤마다 한 명을 협박해 다음 투표에서 투표하지 못하게 해요.' },
+  lover:      { name:'연인',   icon:'💞', team:'special', max:2, step:2, desc:'2명이 한 쌍. 서로가 연인인 걸 알고 밤에 둘만 비밀 대화를 할 수 있어요. 한 명이 죽으면 남은 연인도 슬픔에 따라 죽어요.' },
+  citizen:    { name:'시민',   icon:'👤', team:'citizen', max:99, desc:'특별한 능력은 없어요. 토론과 투표로 마피아를 찾아내세요!' }
 };
+const ROLE_ORDER = ['mafia','spy','traitor','doctor','police','soldier','politician','medium','reporter','gangster','lover'];
+const emptyRoles = () => Object.fromEntries(ROLE_ORDER.map(r => [r, 0]));
+
+function recommend(n){
+  const r = emptyRoles();
+  r.mafia = n >= 10 ? 3 : n >= 6 ? 2 : 1;
+  r.doctor = 1; r.police = 1;
+  if (n >= 6) r.soldier = 1;
+  if (n >= 7) r.politician = 1;
+  if (n >= 8) r.reporter = 1;
+  if (n >= 9) r.spy = 1;
+  if (n >= 11) r.medium = 1;
+  if (n >= 12) r.gangster = 1;
+  return r;
+}
+function validate(cfg, n){
+  const special = ROLE_ORDER.reduce((a, r) => a + cfg.roles[r], 0);
+  const mteam = cfg.roles.mafia + cfg.roles.spy + cfg.roles.traitor;
+  if (n < 4) return '최소 4명이 필요해요.';
+  if (cfg.roles.mafia < 1) return '마피아는 최소 1명이어야 해요.';
+  if (cfg.roles.lover % 2) return '연인은 2명(한 쌍)으로만 정할 수 있어요.';
+  if (special > n) return `역할 수(${special}개)가 인원(${n}명)보다 많아요.`;
+  if (mteam * 2 >= n) return `마피아 팀(${mteam}명)은 전체 인원의 절반보다 적어야 해요.`;
+  return '';
+}
+function fmtSec(s){ return s >= 60 ? (s % 60 ? `${Math.floor(s/60)}분 ${s%60}초` : `${s/60}분`) : `${s}초`; }
+function compoText(cfg, n){
+  const parts = ROLE_ORDER.filter(r => cfg.roles[r]).map(r => `${ROLE[r].name} ${cfg.roles[r]}`);
+  const cit = n - ROLE_ORDER.reduce((a, r) => a + cfg.roles[r], 0);
+  if (cit > 0) parts.push(`시민 ${cit}`);
+  return parts.join(' · ');
+}
 
 const $ = s => document.querySelector(s);
 const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
 let peer = null, myId = null, isHost = false, hostConn = null, roomCode = '', myName = '';
-let S = null;          // 서버(방장)에서 받은 최신 상태
-let localEnd = 0;      // 현재 단계 종료 시각(로컬 기준)
-let leaving = false;
+let S = null, localEnd = 0, leaving = false;
 
 /* ================= 시작 화면 ================= */
 const qsRoom = new URLSearchParams(location.search).get('room');
@@ -188,7 +245,6 @@ try { $('#nick').value = localStorage.getItem('mafia_nick') || ''; } catch(e){}
 function homeErr(t){ $('#homeErr').textContent = t || ''; }
 function homeStatus(t){ $('#homeStatus').textContent = t || ''; }
 function setHomeBusy(b){ $('#btnCreate').disabled = b; $('#btnJoin').disabled = b; }
-
 function readNick(){
   const n = $('#nick').value.trim().slice(0,10);
   if (!n) { homeErr('닉네임을 입력해 주세요.'); $('#nick').focus(); return null; }
@@ -217,14 +273,14 @@ function createHostPeer(tries = 0){
     myId = id; roomCode = code;
     H.players = [{ id, name: myName, role:null, alive:true, online:true }];
     enterRoom();
-    addSys(`방이 만들어졌어요. 친구들에게 방 코드 [${code}]를 알려주세요.`);
+    mcTo(myId, `방이 만들어졌어요. 친구들에게 방 코드 [${code}]를 알려주세요. 역할 구성은 아래 '역할 설정'에서 바꿀 수 있어요.`);
     broadcastState();
   });
   peer.on('connection', hostOnConn);
   peer.on('error', err => {
     if (err.type === 'unavailable-id' && tries < 5) { peer.destroy(); createHostPeer(tries+1); return; }
     if (!S) { setHomeBusy(false); homeStatus(); homeErr('연결 오류: ' + (err.type || err.message)); }
-    else addSys('연결 오류: ' + (err.type || err.message), 'err');
+    else addErr('연결 오류: ' + (err.type || err.message));
   });
   peer.on('disconnected', () => { if (!leaving && peer && !peer.destroyed) peer.reconnect(); });
 }
@@ -242,7 +298,7 @@ $('#btnJoin').onclick = () => {
     hostConn.on('data', recv);
     hostConn.on('close', () => {
       if (leaving) return;
-      if (S) { addSys('방장과의 연결이 끊어졌어요. 게임을 계속할 수 없어요.', 'err'); $('#chatInput').disabled = true; }
+      if (S) { addErr('방장과의 연결이 끊어졌어요. 게임을 계속할 수 없어요.'); $('#chatInput').disabled = true; }
       else { setHomeBusy(false); homeStatus(); homeErr('방에 접속하지 못했어요.'); }
     });
   });
@@ -250,7 +306,7 @@ $('#btnJoin').onclick = () => {
     if (!S) {
       setHomeBusy(false); homeStatus();
       homeErr(err.type === 'peer-unavailable' ? '방을 찾을 수 없어요. 코드를 확인해 주세요.' : '연결 오류: ' + (err.type || err.message));
-    } else addSys('연결 오류: ' + (err.type || err.message), 'err');
+    } else addErr('연결 오류: ' + (err.type || err.message));
   });
 };
 $('#nick').addEventListener('keydown', e => { if (e.key === 'Enter') ($('#joinCode').value.trim() ? $('#btnJoin') : $('#btnCreate')).click(); });
@@ -262,14 +318,12 @@ function enterRoom(){
   $('#code').textContent = roomCode;
   $('#log').innerHTML = '';
 }
-
 $('#btnCopy').onclick = () => {
-  const t = roomCode;
-  (navigator.clipboard ? navigator.clipboard.writeText(t) : Promise.reject()).then(
-    () => addSys('방 코드를 복사했어요.'), () => addSys('방 코드: ' + t));
+  (navigator.clipboard ? navigator.clipboard.writeText(roomCode) : Promise.reject()).then(
+    () => addErr('방 코드를 복사했어요.'), () => addErr('방 코드: ' + roomCode));
 };
 $('#btnLeave').onclick = () => {
-  if (S && S.phase !== 'lobby' && S.phase !== 'end' && !confirm('게임 중에 나가면 사망 처리돼요. 나갈까요?')) return;
+  if (S && !['lobby','end'].includes(S.phase) && !confirm('게임 중에 나가면 사망 처리돼요. 나갈까요?')) return;
   if (isHost && !confirm('방장이 나가면 방이 사라져요. 나갈까요?')) return;
   leaving = true; try { peer && peer.destroy(); } catch(e){}
   location.href = location.pathname;
@@ -281,142 +335,186 @@ function send(m){
   else if (hostConn && hostConn.open) hostConn.send(m);
 }
 
-/* ================= 클라이언트: 메시지 수신 ================= */
+/* ================= 클라이언트: 수신 ================= */
 function recv(m){
   switch (m.type) {
     case 'welcome': roomCode = m.code; myName = m.name; enterRoom(); break;
-    case 'state':
-      S = m; localEnd = m.remaining ? Date.now() + m.remaining : 0; render(); break;
+    case 'state': S = m; localEnd = m.remaining ? Date.now() + m.remaining : 0; render(); break;
     case 'chat': addChat(m); break;
-    case 'sys': addSys(m.text, m.kind); break;
+    case 'mc': addMC(m.text, m.private); break;
     case 'error':
       if (m.fatal && !S) { setHomeBusy(false); homeStatus(); homeErr(m.text); leaving = true; peer && peer.destroy(); }
-      else addSys(m.text, 'err');
+      else addErr(m.text);
       break;
   }
 }
-
 function addChat(m){
   const div = document.createElement('div');
   div.className = 'msg ch-' + m.ch + (m.fromId === myId ? ' mine' : '');
-  const tag = m.ch === 'mafia' ? '<span class="tag">[마피아]</span>' : m.ch === 'dead' ? '<span class="tag">[사망자]</span>' : '';
+  const tag = m.ch === 'mafia' ? '<span class="tag">[마피아]</span>'
+            : m.ch === 'lover' ? '<span class="tag">[연인]</span>'
+            : m.ch === 'dead' ? `<span class="tag">${m.medium ? '[영매]' : '[사망자]'}</span>` : '';
   div.innerHTML = `${tag}<span class="who">${esc(m.from)}</span>${esc(m.text)}`;
   pushLog(div);
 }
-function addSys(text, kind){
+function addMC(text, priv){
   const div = document.createElement('div');
-  div.className = 'msg ' + (kind === 'err' ? 'err' : kind === 'private' ? 'private' : 'sys');
-  div.textContent = text;
+  div.className = 'msg mc' + (priv ? ' private' : '');
+  div.innerHTML = `<span class="who">${priv ? MC + ' (귓속말)' : MC}</span>${esc(text)}`;
   pushLog(div);
+}
+function addErr(text){
+  const div = document.createElement('div');
+  div.className = 'msg err'; div.textContent = text; pushLog(div);
 }
 function pushLog(div){
   const log = $('#log');
-  const atBottom = log.scrollHeight - log.scrollTop - log.clientHeight < 60;
+  const atBottom = log.scrollHeight - log.scrollTop - log.clientHeight < 80;
   log.appendChild(div);
   if (atBottom || div.classList.contains('mine')) log.scrollTop = log.scrollHeight;
 }
-
 $('#chatForm').addEventListener('submit', e => {
   e.preventDefault();
-  const t = $('#chatInput').value.trim();
-  if (!t) return;
+  const t = $('#chatInput').value.trim(); if (!t) return;
   send({ type:'chat', text: t });
   $('#chatInput').value = '';
 });
 
-/* ================= 클라이언트: 화면 그리기 ================= */
+/* ================= 클라이언트: 화면 ================= */
+const isMafiaSideMe = s => s.myRole === 'mafia' || (s.myRole === 'spy' && s.contact);
+
 function render(){
   const s = S; if (!s) return;
   document.body.className = 'ph-' + s.phase;
   $('#code').textContent = s.code;
-
-  const PH = { lobby:'🏠 대기실', day:`☀️ ${s.day}일차 낮`, vote:`🌆 ${s.day}일차 저녁 · 투표`, night:`🌙 ${s.day}일차 밤`, end:'🏁 게임 종료' };
+  const PH = { lobby:'🏠 대기실', day:`☀️ ${s.day}일차 낮`, vote:`🗳️ ${s.day}일차 투표`, night:`🌙 ${s.day}일차 밤`, end:'🏁 게임 종료' };
   $('#phase').textContent = PH[s.phase] || '';
+  const n = s.players.length;
 
   // 역할 카드
   const rc = $('#roleCard');
   if (s.myRole) {
     const r = ROLE[s.myRole];
-    const mates = s.myRole === 'mafia' ? s.players.filter(p => p.role === 'mafia' && p.id !== s.me).map(p => p.name) : [];
+    const mates = s.players.filter(p => p.id !== s.me && p.role && (
+      (isMafiaSideMe(s) && (p.role === 'mafia' || p.role === 'spy')) || (s.myRole === 'traitor' && p.role === 'mafia') || (s.myRole === 'lover' && p.role === 'lover'))).map(p => p.name);
+    const mateLabel = s.myRole === 'traitor' ? '도와줄 마피아' : s.myRole === 'lover' ? '나의 연인' : '동료';
     rc.className = 'card' + (s.alive ? '' : ' dead');
     rc.innerHTML = `<div class="icon">${r.icon}</div><div style="font-size:12px;color:var(--muted)">나의 역할</div>
       <div class="rname">${r.name}</div><div class="rdesc">${r.desc}</div>
-      ${mates.length ? `<div class="rdesc" style="margin-top:8px;color:var(--red)">동료 마피아: ${esc(mates.join(', '))}</div>` : ''}
+      ${mates.length ? `<div class="rdesc" style="margin-top:8px;color:var(--red)">${mateLabel}: ${esc(mates.join(', '))}</div>` : ''}
       ${s.alive ? '' : '<div class="deadTag">사망</div>'}
       ${s.phase === 'end' ? `<div class="rname" style="margin-top:10px;color:var(--accent)">${s.winner === 'mafia' ? '🔪 마피아 승리' : '🎉 시민 승리'}</div>` : ''}`;
   } else {
     rc.className = 'card';
-    const n = s.players.length;
     rc.innerHTML = `<div class="icon">🎭</div><div class="rname">게임 대기 중</div>
-      <div class="rdesc">현재 ${n}명 참가 중 (최소 4명)<br>방장이 시작하면 역할이 무작위로 정해져요.</div>`;
+      <div class="rdesc">현재 ${n}명 참가 중 (4~12명)<br>방장이 시작하면 역할이 무작위로 정해져요.</div>`;
   }
 
-  // 안내 문구
+  // 안내
+  const err = s.phase === 'lobby' ? validate(s.config, n) : '';
   let hint = '';
-  if (s.phase === 'lobby') hint = isHost ? '4명 이상 모이면 게임을 시작하세요.' : '방장이 게임을 시작할 때까지 기다려 주세요.';
+  if (s.phase === 'lobby') hint = isHost ? (err || '준비되면 게임을 시작하세요.') : '방장이 게임을 시작할 때까지 기다려 주세요.';
   else if (s.phase === 'end') hint = '모든 역할이 공개되었어요.';
   else if (!s.alive) hint = '👻 당신은 죽었어요. 게임을 지켜보세요.';
   else if (s.phase === 'day') hint = '토론하며 마피아를 추리하세요.';
-  else if (s.phase === 'vote') hint = s.myVote ? '투표 완료 (다시 누르면 취소)' : '처형할 사람에게 투표하세요.';
+  else if (s.phase === 'vote') hint = s.blockedMe ? '👊 협박당해서 이번 투표에 참여할 수 없어요.' : s.myVote ? '투표 완료! (다시 누르면 취소)' : '처형할 사람에게 투표하세요.';
   else if (s.phase === 'night') {
-    hint = { mafia:'제거할 사람을 지목하세요.', doctor:'치료할 사람을 선택하세요.', police: s.myAction ? '오늘 밤 조사를 마쳤어요.' : '조사할 사람을 선택하세요.', citizen:'밤이 지나가길 기다리세요...' }[s.myRole];
+    hint = {
+      mafia: s.myAction ? '지목 완료. 마피아 채팅으로 상의해서 바꿀 수 있어요.' : '마피아 채팅으로 상의하고 제거할 사람을 지목하세요.',
+      spy: s.myAction ? '오늘 밤 조사를 마쳤어요.' : '직업을 알아낼 사람을 선택하세요.',
+      doctor: '치료할 사람을 선택하세요.',
+      police: s.myAction ? '오늘 밤 조사를 마쳤어요.' : '조사할 사람을 선택하세요.',
+      reporter: s.myAction ? '취재 완료! 살아남으면 아침에 공개돼요.' : s.myUsed ? '이미 취재 능력을 사용했어요.' : '취재할 사람을 고르세요. (게임 중 1번, 이번 밤엔 안 써도 돼요)',
+      gangster: '협박할 사람을 선택하세요.',
+      medium: '죽은 사람들과 대화할 수 있어요.',
+      lover: '연인과 둘만 비밀 대화를 나눌 수 있어요.',
+      traitor: '마피아가 이기도록 내일 토론에서 도와주세요...',
+      soldier: '밤이 지나가길 기다리세요...', politician: '밤이 지나가길 기다리세요...', citizen: '밤이 지나가길 기다리세요...'
+    }[s.myRole];
   }
   $('#hint').textContent = hint;
 
   // 플레이어 목록
+  const R = s.myRole, a = s.myAction;
+  const pick = (q, label, done) => `<button data-act="act" data-id="${q.id}" class="${a === q.id ? 'sel' : ''}">${a === q.id ? done : label}</button>`;
+  const lockPick = (q, label, done) => a ? (a === q.id ? `<button class="sel" disabled>${done}</button>` : '') : `<button data-act="act" data-id="${q.id}">${label}</button>`;
   $('#players').innerHTML = s.players.map(q => {
     const tags = [];
     if (q.id === s.me) tags.push('<span class="badge me">나</span>');
     if (q.id === s.hostId) tags.push('<span class="badge">방장</span>');
-    if (q.role && (q.id !== s.me || s.phase === 'end')) tags.push(`<span class="badge ${q.role}">${ROLE[q.role].name}</span>`);
+    if (q.role && (q.id !== s.me || s.phase === 'end')) tags.push(`<span class="badge t-${ROLE[q.role].team}">${ROLE[q.role].name}</span>`);
     if (!q.online) tags.push('<span class="badge">나감</span>');
     else if (!q.alive) tags.push('<span class="badge">사망</span>');
-
     let btn = '';
     if (s.alive && q.alive) {
-      if (s.phase === 'vote' && q.id !== s.me) {
+      if (s.phase === 'vote' && q.id !== s.me && !s.blockedMe) {
         btn = `<button data-act="vote" data-id="${q.id}" class="${s.myVote === q.id ? 'sel' : ''}">${s.myVote === q.id ? '투표함' : '투표'}</button>`;
       } else if (s.phase === 'night') {
-        if (s.myRole === 'mafia' && q.role !== 'mafia')
-          btn = `<button data-act="act" data-id="${q.id}" class="${s.myAction === q.id ? 'sel' : ''}">${s.myAction === q.id ? '지목됨' : '지목'}</button>`;
-        else if (s.myRole === 'doctor')
-          btn = `<button data-act="act" data-id="${q.id}" class="${s.myAction === q.id ? 'sel' : ''}">${s.myAction === q.id ? '치료 중' : '치료'}</button>`;
-        else if (s.myRole === 'police' && q.id !== s.me)
-          btn = s.myAction ? (s.myAction === q.id ? '<button class="sel" disabled>조사함</button>' : '')
-                           : `<button data-act="act" data-id="${q.id}">조사</button>`;
+        const self = q.id === s.me;
+        if (R === 'mafia' && !(q.role === 'mafia' || q.role === 'spy')) btn = pick(q, '지목', '지목됨');
+        else if (R === 'doctor') btn = pick(q, '치료', '치료 중');
+        else if (R === 'gangster' && !self) btn = pick(q, '협박', '협박 중');
+        else if (R === 'police' && !self) btn = lockPick(q, '조사', '조사함');
+        else if (R === 'spy' && !self) btn = lockPick(q, '조사', '조사함');
+        else if (R === 'reporter' && !self && (a || !s.myUsed)) btn = lockPick(q, '취재', '취재함');
       }
     }
     const votes = s.phase === 'vote' && q.votes ? `<span class="votes">${q.votes}표</span>` : '';
-    return `<li class="${q.alive ? '' : 'dead'} ${q.online ? '' : 'off'}">
-      <span class="pname">${esc(q.name)}</span>${tags.join('')}${votes}${btn}</li>`;
+    return `<li class="${q.alive ? '' : 'dead'}"><span class="pname">${esc(q.name)}</span>${tags.join('')}${votes}${btn}</li>`;
   }).join('');
 
   // 방장 버튼
   let hb = '';
   if (isHost) {
-    if (s.phase === 'lobby') {
-      const n = s.players.length;
-      hb = `<button data-act="start" ${n < 4 ? 'disabled' : ''}>게임 시작 (${n}명)</button>`;
-    } else if (s.phase === 'day') hb = `<button class="ghost" data-act="skip">토론 끝내고 바로 투표</button>`;
+    if (s.phase === 'lobby') hb = `<button data-act="start" ${err ? 'disabled' : ''}>게임 시작 (${n}명)</button>`;
+    else if (s.phase === 'day') hb = `<button class="ghost" data-act="skip">토론 끝내고 바로 투표</button>`;
     else if (s.phase === 'end') hb = `<button data-act="restart">대기실로 돌아가기 (다시 하기)</button>`;
-    if (s.phase !== 'lobby' && s.phase !== 'end') hb += '<div class="note">방장은 창을 닫거나 다른 탭에 오래 두지 마세요.</div>';
+    if (!['lobby','end'].includes(s.phase)) hb += '<div class="note">방장은 이 창을 닫거나 다른 탭에 오래 두지 마세요.</div>';
   }
   $('#hostBox').innerHTML = hb;
+  $('#compo').textContent = s.phase !== 'lobby' && s.compo ? '이번 판 구성: ' + s.compo : '';
+
+  renderConfig(s, err);
 
   // 채팅 채널
-  let label = '전체 채팅', can = true;
-  if (s.phase === 'lobby' || s.phase === 'end') label = '전체 채팅';
-  else if (!s.alive) label = '👻 사망자 채팅 (죽은 사람끼리만 보여요)';
-  else if (s.phase === 'night') {
-    if (s.myRole === 'mafia') label = '🔪 마피아 채팅 (마피아끼리만 보여요)';
-    else { label = '🌙 밤에는 대화할 수 없어요'; can = false; }
+  let label = '💬 전체 채팅', can = true;
+  if (['day','vote','night'].includes(s.phase)) {
+    if (!s.alive) label = '👻 사망자 채팅 (죽은 사람과 영매만 보여요)';
+    else if (s.phase === 'night') {
+      if (isMafiaSideMe(s)) label = '🔪 마피아 채팅 (마피아끼리만 보여요) — 누구를 죽일지 상의하세요';
+      else if (R === 'medium') label = '🔮 영매 채팅 (죽은 사람들과 대화해요)';
+      else if (R === 'lover') label = '💞 연인 채팅 (연인끼리만 보여요)';
+      else { label = '🌙 밤에는 대화할 수 없어요'; can = false; }
+    }
   }
   $('#chanLabel').textContent = label;
   $('#chatInput').disabled = !can;
   $('#chatInput').placeholder = can ? '메시지 입력' : '밤에는 조용히...';
 }
 
-// 버튼 클릭(이벤트 위임)
+function renderConfig(s, err){
+  const card = $('#configCard');
+  if (s.phase !== 'lobby') { card.classList.add('hidden'); return; }
+  card.classList.remove('hidden');
+  const c = s.config, n = s.players.length;
+  const special = ROLE_ORDER.reduce((x, r) => x + c.roles[r], 0);
+  const row = (r, cnt, editable) => `<div class="cfgrow"><span class="ri">${ROLE[r].icon}</span>
+    <div class="rinfo"><b>${ROLE[r].name}</b><small>${ROLE[r].desc}</small></div>
+    ${editable ? `<button class="ghost" data-act="cfg" data-role="${r}" data-d="-1">−</button>` : ''}
+    <span class="cnt">${cnt}</span>
+    ${editable ? `<button class="ghost" data-act="cfg" data-role="${r}" data-d="1">+</button>` : ''}</div>`;
+  const durSel = (k, label) => isHost
+    ? `<label style="display:inline;margin:0">${label} <select data-dur="${k}">${DUR_OPTS[k].map(v => `<option value="${v}" ${c.dur[k] === v ? 'selected' : ''}>${fmtSec(v)}</option>`).join('')}</select></label>`
+    : `<span>${label} ${fmtSec(c.dur[k])}</span>`;
+  card.innerHTML = `<h3>⚙️ 역할 설정 ${isHost ? '' : '<small style="color:var(--muted);font-weight:400">(방장만 변경 가능)</small>'}</h3>
+    ${ROLE_ORDER.map(r => row(r, c.roles[r], isHost)).join('')}
+    ${row('citizen', Math.max(0, n - special), false)}
+    <div class="durs">${durSel('day','☀️ 낮')}${durSel('vote','🗳️ 투표')}${durSel('night','🌙 밤')}</div>
+    <div id="cfgErr">${err ? esc(err) : ''}</div>
+    ${isHost ? '<button class="ghost" data-act="recommend" style="width:100%;margin-top:4px">인원수에 맞게 자동 추천</button>' : ''}`;
+}
+
+// 버튼 클릭
 document.addEventListener('click', e => {
   const b = e.target.closest('button[data-act]'); if (!b || b.disabled) return;
   const a = b.dataset.act, id = b.dataset.id;
@@ -425,50 +523,67 @@ document.addEventListener('click', e => {
   else if (a === 'start') send({ type:'start' });
   else if (a === 'skip') send({ type:'skip' });
   else if (a === 'restart') send({ type:'restart' });
+  else if (a === 'recommend') send({ type:'config', config:{ roles: recommend(S.players.length), dur: S.config.dur } });
+  else if (a === 'cfg') {
+    const roles = { ...S.config.roles };
+    roles[b.dataset.role] = Math.max(0, Math.min(ROLE[b.dataset.role].max, roles[b.dataset.role] + Number(b.dataset.d) * (ROLE[b.dataset.role].step || 1)));
+    send({ type:'config', config:{ roles, dur: S.config.dur } });
+  }
+});
+document.addEventListener('change', e => {
+  const sel = e.target.closest('select[data-dur]'); if (!sel) return;
+  send({ type:'config', config:{ roles: S.config.roles, dur: { ...S.config.dur, [sel.dataset.dur]: Number(sel.value) } } });
 });
 
-// 타이머 표시
+// 타이머
 setInterval(() => {
   if (!S) return;
-  if (!localEnd || S.phase === 'lobby' || S.phase === 'end') { $('#timer').textContent = ''; return; }
+  if (!localEnd || ['lobby','end'].includes(S.phase)) { $('#timer').textContent = ''; return; }
   const r = Math.max(0, Math.ceil((localEnd - Date.now()) / 1000));
   $('#timer').textContent = `${Math.floor(r/60)}:${String(r%60).padStart(2,'0')}`;
 }, 250);
 
 /* ================= 방장(호스트): 게임 진행 ================= */
-const H = { players: [], phase:'lobby', day:0, endAt:0, votes:{}, night:{}, timer:null, winner:null };
+const H = {
+  players: [], phase:'lobby', day:0, endAt:0, votes:{}, night:{}, blocked:null, timer:null, winner:null, compo:'',
+  config: { roles: recommend(4), dur: { day:120, vote:30, night:30 } }
+};
 const conns = {};
+const P = id => H.players.find(p => p.id === id);
+const inGame = () => ['day','vote','night'].includes(H.phase);
+const mafiaSide = x => x.role === 'mafia' || (x.role === 'spy' && x.contact);
+const deadChannel = x => !x.alive || x.role === 'medium';
 
 function hostOnConn(conn){
   conn.on('data', d => hostHandle(conn.peer, d, conn));
   conn.on('close', () => hostLeave(conn.peer));
   conn.on('error', () => {});
 }
-
 function deliver(pid, m){
   if (pid === myId) { recv(m); return; }
   const c = conns[pid];
   if (c && c.open) { try { c.send(m); } catch(e){} }
 }
 function toWhere(fn, m){ H.players.forEach(p => { if (p.online && fn(p)) deliver(p.id, m); }); }
-function toAll(m){ toWhere(() => true, m); }
-function sysAll(text){ toAll({ type:'sys', text }); }
-const P = id => H.players.find(p => p.id === id);
-const inGame = () => ['day','vote','night'].includes(H.phase);
+function mc(text){ toWhere(() => true, { type:'mc', text }); }
+function mcTo(pid, text){ deliver(pid, { type:'mc', text, private:true }); }
+function mcWhere(fn, text){ toWhere(fn, { type:'mc', text, private:true }); }
+
+const voteWeight = p => p.role === 'politician' ? 2 : 1;
+const voters = () => H.players.filter(q => q.alive && q.id !== H.blocked);
 
 function view(p){
   const reveal = H.phase === 'end';
   const counts = {};
-  if (H.phase === 'vote') Object.values(H.votes).forEach(t => counts[t] = (counts[t]||0) + 1);
-  let myAction = null;
-  if (H.phase === 'night' && p.role && p.role !== 'citizen') myAction = H.night[p.role] || null;
+  if (H.phase === 'vote') for (const [v, t] of Object.entries(H.votes)) { const vp = P(v); if (vp) counts[t] = (counts[t] || 0) + voteWeight(vp); }
   return {
     type:'state', phase:H.phase, day:H.day, remaining: H.endAt ? Math.max(0, H.endAt - Date.now()) : 0,
-    hostId: myId, code: roomCode, me: p.id, myRole: p.role, alive: p.alive,
-    myVote: H.votes[p.id] || null, myAction, winner: H.winner,
+    hostId: myId, code: roomCode, me: p.id, myRole: p.role, alive: p.alive, contact: !!p.contact,
+    myVote: H.votes[p.id] || null, myAction: H.phase === 'night' && p.role ? (H.night[p.role] || null) : null,
+    myUsed: !!p.used, blockedMe: H.blocked === p.id, winner: H.winner, config: H.config, compo: H.compo,
     players: H.players.map(q => ({
       id:q.id, name:q.name, alive:q.alive, online:q.online, votes: counts[q.id] || 0,
-      role: (reveal || q.id === p.id || (p.role === 'mafia' && q.role === 'mafia')) ? q.role : null
+      role: (reveal || q.id === p.id || (mafiaSide(p) && mafiaSide(q)) || (p.role === 'traitor' && q.role === 'mafia') || (p.role === 'lover' && q.role === 'lover')) ? q.role : null
     }))
   };
 }
@@ -482,11 +597,20 @@ function setPhase(ph, sec, next){
   H.timer = setTimeout(next, ms);
   broadcastState();
 }
-function hurry(next){            // 모두 행동을 마쳤으면 3초 뒤 진행
+function hurry(next, ms){            // 모두 행동을 마치면 잠깐 뒤 자동 진행
   clearTimeout(H.timer);
-  const ms = Math.min(3000, H.endAt - Date.now());
-  H.endAt = Date.now() + Math.max(0, ms);
-  H.timer = setTimeout(next, Math.max(0, ms));
+  ms = Math.max(0, Math.min(ms, H.endAt - Date.now()));
+  H.endAt = Date.now() + ms;
+  H.timer = setTimeout(next, ms);
+}
+
+function sanitizeConfig(c){
+  const roles = emptyRoles();
+  ROLE_ORDER.forEach(r => { const v = Math.floor(Number(c && c.roles && c.roles[r])); roles[r] = Math.max(0, Math.min(ROLE[r].max, isFinite(v) ? v : 0)); });
+  if (roles.lover % 2) roles.lover = 0;
+  const dur = {};
+  ['day','vote','night'].forEach(k => { const v = Number(c && c.dur && c.dur[k]); dur[k] = DUR_OPTS[k].includes(v) ? v : H.config.dur[k]; });
+  return { roles, dur };
 }
 
 function hostHandle(pid, m, conn){
@@ -503,7 +627,7 @@ function hostHandle(pid, m, conn){
     while (H.players.some(p => p.name === name)) name = base + (i++);
     H.players.push({ id:pid, name, role:null, alive:true, online:true });
     conn.send({ type:'welcome', code: roomCode, name });
-    sysAll(`${name}님이 입장했어요.`);
+    mc(`${name}님이 입장했어요. 환영합니다!`);
     broadcastState();
     return;
   }
@@ -514,58 +638,87 @@ function hostHandle(pid, m, conn){
     case 'chat': {
       const text = String(m.text || '').trim().slice(0,200); if (!text) return;
       const msg = { type:'chat', from:p.name, fromId:p.id, text, ch:'all' };
-      if (!inGame()) return toAll(msg);
-      if (!p.alive) return toWhere(q => !q.alive, { ...msg, ch:'dead' });
+      if (!inGame()) return toWhere(() => true, msg);
+      if (!p.alive) return toWhere(deadChannel, { ...msg, ch:'dead' });
       if (H.phase === 'night') {
-        if (p.role === 'mafia') return toWhere(q => q.role === 'mafia', { ...msg, ch:'mafia' });
-        return deliver(pid, { type:'error', text:'밤에는 마피아만 대화할 수 있어요.' });
+        if (mafiaSide(p)) return toWhere(mafiaSide, { ...msg, ch:'mafia' });
+        if (p.role === 'medium') return toWhere(deadChannel, { ...msg, ch:'dead', medium:true });
+        if (p.role === 'lover') return toWhere(q => q.role === 'lover', { ...msg, ch:'lover' });
+        return deliver(pid, { type:'error', text:'밤에는 대화할 수 없어요.' });
       }
-      return toAll(msg);
+      return toWhere(() => true, msg);
+    }
+    case 'config': {
+      if (pid !== myId || H.phase !== 'lobby') return;
+      H.config = sanitizeConfig(m.config);
+      broadcastState();
+      return;
     }
     case 'start': {
       if (pid !== myId || H.phase !== 'lobby') return;
       H.players = H.players.filter(q => q.online);
       const n = H.players.length;
-      if (n < 4) return deliver(pid, { type:'error', text:'최소 4명이 필요해요.' });
-      const k = n >= 9 ? 3 : n >= 6 ? 2 : 1;
-      const roles = [...Array(k).fill('mafia'), 'doctor', 'police'];
+      const err = validate(H.config, n);
+      if (err) return deliver(pid, { type:'error', text: err });
+      const roles = [];
+      ROLE_ORDER.forEach(r => { for (let i = 0; i < H.config.roles[r]; i++) roles.push(r); });
       while (roles.length < n) roles.push('citizen');
       for (let i = roles.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i+1)); [roles[i], roles[j]] = [roles[j], roles[i]]; }
-      H.players.forEach((q, i) => { q.role = roles[i]; q.alive = true; });
-      H.day = 1; H.winner = null; H.votes = {};
-      sysAll(`🎭 게임 시작! 마피아 ${k}명 · 의사 1명 · 경찰 1명 · 시민 ${n-k-2}명. 왼쪽에서 내 역할을 확인하세요.`);
+      H.players.forEach((q, i) => { q.role = roles[i]; q.alive = true; q.used = false; q.contact = false; q.armor = q.role === 'soldier'; });
+      H.day = 1; H.winner = null; H.votes = {}; H.blocked = null;
+      H.compo = compoText(H.config, n);
+      mc(`🎭 지금부터 마피아 게임을 시작하겠습니다! 참가자는 ${n}명, 구성은 ${H.compo}입니다. 왼쪽에서 자신의 역할을 확인하세요. 절대 들키지 마세요!`);
+      mcWhere(q => q.role === 'mafia', `당신은 마피아입니다. 동료: ${H.players.filter(q => q.role === 'mafia').map(q => q.name).join(', ')}. 밤마다 마피아 채팅으로 상의해 한 명을 제거하세요.`);
+      mcWhere(q => q.role === 'traitor', `당신은 배신자입니다. 마피아는 ${H.players.filter(q => q.role === 'mafia').map(q => q.name).join(', ')}님이에요. 마피아는 당신을 모릅니다.`);
+      mcWhere(q => q.role === 'lover', `당신은 연인입니다. 당신의 짝은 ${H.players.filter(q => q.role === 'lover').map(q => q.name).join(' ♥ ')}입니다.`);
       startDay();
       return;
     }
     case 'skip':
-      if (pid === myId && H.phase === 'day') startVote();
+      if (pid === myId && H.phase === 'day') { mc('방장이 토론을 마쳤습니다.'); startVote(); }
       return;
     case 'vote': {
       if (H.phase !== 'vote' || !p.alive) return;
+      if (H.blocked === pid) return deliver(pid, { type:'error', text:'협박당해서 이번 투표에 참여할 수 없어요.' });
       if (m.target === null) delete H.votes[pid];
       else {
         const t = P(m.target);
         if (!t || !t.alive || t.id === pid) return;
         H.votes[pid] = t.id;
       }
+      checkVoteDone();
       broadcastState();
-      if (H.players.filter(q => q.alive).every(q => H.votes[q.id])) { hurry(resolveVote); broadcastState(); }
       return;
     }
     case 'act': {
       if (H.phase !== 'night' || !p.alive) return;
       const t = P(m.target); if (!t || !t.alive) return;
-      if (p.role === 'mafia') {
-        if (t.role === 'mafia') return;
+      const R = p.role;
+      if (R === 'mafia') {
+        if (mafiaSide(t)) return;
         H.night.mafia = t.id;
-        toWhere(q => q.role === 'mafia', { type:'sys', text:`🔪 ${p.name}님이 ${t.name}님을 지목했어요.`, kind:'private' });
-      } else if (p.role === 'doctor') {
+        mcWhere(mafiaSide, `🔪 ${p.name}님이 ${t.name}님을 지목했습니다. (마지막 지목이 적용돼요)`);
+      } else if (R === 'doctor') {
         H.night.doctor = t.id;
-      } else if (p.role === 'police') {
+      } else if (R === 'gangster') {
+        if (t.id === pid) return;
+        H.night.gangster = t.id;
+      } else if (R === 'police') {
         if (H.night.police || t.id === pid) return;
         H.night.police = t.id;
-        deliver(pid, { type:'sys', kind:'private',
-          text: t.role === 'mafia' ? `🔍 조사 결과: ${t.name}님은 마피아입니다!` : `🔍 조사 결과: ${t.name}님은 마피아가 아닙니다.` });
+        mcTo(pid, t.role === 'mafia' ? `🔍 조사 결과, ${t.name}님은 마피아입니다!` : `🔍 조사 결과, ${t.name}님은 마피아가 아닙니다.`);
+      } else if (R === 'spy') {
+        if (H.night.spy || t.id === pid) return;
+        H.night.spy = t.id;
+        mcTo(pid, `🕶️ 조사 결과, ${t.name}님의 직업은 ${ROLE[t.role].name}입니다.`);
+        if (t.role === 'mafia' && !p.contact) {
+          p.contact = true;
+          mcWhere(mafiaSide, `🤝 스파이 ${p.name}님이 마피아와 접선했습니다! 이제 마피아 채팅을 함께 써요.`);
+        }
+      } else if (R === 'reporter') {
+        if (p.used || t.id === pid) return;
+        p.used = true; H.night.reporter = t.id;
+        mcTo(pid, `📰 ${t.name}님을 취재했어요. 내일 아침까지 살아남으면 기사가 나갑니다.`);
       } else return;
       broadcastState();
       checkNightDone();
@@ -574,32 +727,42 @@ function hostHandle(pid, m, conn){
     case 'restart': {
       if (pid !== myId || H.phase !== 'end') return;
       H.players = H.players.filter(q => q.online);
-      H.players.forEach(q => { q.role = null; q.alive = true; });
-      H.phase = 'lobby'; H.day = 0; H.endAt = 0; H.winner = null; H.votes = {};
-      sysAll('🏠 대기실로 돌아왔어요. 방장이 다시 시작할 수 있어요.');
+      H.players.forEach(q => { q.role = null; q.alive = true; q.used = false; q.contact = false; q.armor = false; });
+      H.phase = 'lobby'; H.day = 0; H.endAt = 0; H.winner = null; H.votes = {}; H.blocked = null;
+      mc('🏠 대기실로 돌아왔습니다. 방장이 역할을 다시 정하고 시작할 수 있어요.');
       broadcastState();
       return;
     }
   }
 }
 
+function checkVoteDone(){
+  if (H.phase !== 'vote') return;
+  const vs = voters();
+  if (vs.length && vs.every(q => H.votes[q.id])) {
+    if (!H.allVoted) { H.allVoted = true; mc('모든 분이 투표를 마쳤습니다. 곧 결과를 발표하겠습니다.'); }
+    hurry(resolveVote, 1500);
+  }
+}
 function checkNightDone(){
   if (H.phase !== 'night') return;
   const alive = H.players.filter(q => q.alive);
-  const need = ['mafia','doctor','police'].filter(r => alive.some(q => q.role === r));
-  if (need.every(r => H.night[r])) { hurry(resolveNight); broadcastState(); }
+  const need = ['mafia','doctor','police','spy','gangster'].filter(r => alive.some(q => q.role === r));
+  if (need.every(r => H.night[r])) { hurry(resolveNight, 2500); broadcastState(); }
 }
 
 function startDay(){
   H.votes = {};
-  sysAll(`☀️ ${H.day}일차 낮이 밝았어요. 2분 동안 토론하며 마피아를 찾아보세요!`);
-  setPhase('day', DUR.day, startVote);
+  mc(`☀️ ${H.day}일차 아침이 밝았습니다. 지금부터 ${fmtSec(H.config.dur.day)} 동안 자유롭게 토론하며 마피아를 찾아주세요.`);
+  setPhase('day', H.config.dur.day, startVote);
 }
 function startVote(){
   if (H.phase !== 'day') return;
-  H.votes = {};
-  sysAll('🌆 저녁이 되었어요. 30초 안에 처형할 사람에게 투표하세요!');
-  setPhase('vote', DUR.vote, resolveVote);
+  H.votes = {}; H.allVoted = false;
+  mc(`🗳️ 토론 시간이 끝났습니다. 지금부터 투표를 시작하겠습니다. 처형할 사람을 선택해 주세요. (${fmtSec(H.config.dur.vote)}, 모두 투표하면 바로 마감)`);
+  if (H.blocked && P(H.blocked) && P(H.blocked).alive) mcTo(H.blocked, '👊 당신은 어젯밤 건달에게 협박당해 이번 투표에 참여할 수 없습니다.');
+  setPhase('vote', H.config.dur.vote, resolveVote);
+  checkVoteDone();
 }
 function resolveVote(){
   if (H.phase !== 'vote') return;
@@ -607,54 +770,90 @@ function resolveVote(){
   const tally = {}, lines = [];
   for (const [v, t] of Object.entries(H.votes)) {
     const vp = P(v), tp = P(t);
-    if (!vp || !vp.alive || !tp || !tp.alive) continue;
-    tally[t] = (tally[t] || 0) + 1;
-    lines.push(`${vp.name}→${tp.name}`);
+    if (!vp || !vp.alive || v === H.blocked || !tp || !tp.alive) continue;
+    const w = voteWeight(vp);
+    tally[t] = (tally[t] || 0) + w;
+    lines.push(`${vp.name}→${tp.name}${w > 1 ? '(2표)' : ''}`);
   }
-  sysAll('🗳️ 투표 내역: ' + (lines.length ? lines.join(', ') : '아무도 투표하지 않았어요.'));
+  H.blocked = null;
+  mc('투표 결과를 발표하겠습니다. ' + (lines.length ? lines.join(', ') : '아무도 투표하지 않았습니다.'));
   const max = Math.max(0, ...Object.values(tally));
   const top = Object.keys(tally).filter(t => tally[t] === max);
   if (max > 0 && top.length === 1) {
-    const t = P(top[0]); t.alive = false;
-    sysAll(`⚖️ ${t.name}님이 ${max}표로 처형되었어요.`);
-    deliver(t.id, { type:'sys', kind:'private', text:'당신은 처형되었어요. 이제 죽은 사람끼리만 대화할 수 있어요.' });
+    const t = P(top[0]);
+    if (t.role === 'politician') {
+      mc(`⚖️ ${t.name}님이 ${max}표로 최다 득표했지만... ${t.name}님은 정치인이라 처형되지 않습니다!`);
+    } else {
+      mc(`⚖️ ${max}표를 받은 ${t.name}님이 처형되었습니다.`);
+      mcTo(t.id, '당신은 처형되었습니다. 이제 죽은 사람끼리만 대화할 수 있어요.');
+      kill(t);
+    }
   } else {
-    sysAll(max > 0 ? '⚖️ 동점이라 아무도 처형되지 않았어요.' : '⚖️ 아무도 처형되지 않았어요.');
+    mc(max > 0 ? '⚖️ 동점이 나와 오늘은 아무도 처형되지 않습니다.' : '⚖️ 오늘은 아무도 처형되지 않습니다.');
   }
   if (checkWin()) return;
   startNight();
 }
 function startNight(){
-  H.night = { mafia:null, doctor:null, police:null };
-  sysAll('🌙 밤이 되었어요. 마피아·의사·경찰은 대상을 선택하세요. (30초)');
-  setPhase('night', DUR.night, resolveNight);
+  H.night = { mafia:null, doctor:null, police:null, spy:null, reporter:null, gangster:null };
+  mc(`🌙 밤이 되었습니다. 모두 고개를 숙여주세요... 마피아는 비밀 채팅으로 상의해 제거할 사람을 지목하세요. 능력자들도 능력을 사용하세요. (${fmtSec(H.config.dur.night)})`);
+  setPhase('night', H.config.dur.night, resolveNight);
 }
 function resolveNight(){
   if (H.phase !== 'night') return;
   clearTimeout(H.timer);
-  const t = P(H.night.mafia);
+  const N = H.night;
+  // 건달 협박 → 다음 투표 금지
+  H.blocked = N.gangster && P(N.gangster) ? N.gangster : null;
+  // 마피아 공격
+  const t = P(N.mafia);
+  let story = '', victim = null;
   if (t && t.alive) {
-    if (H.night.doctor === t.id) sysAll('💉 의사가 마피아의 공격으로부터 누군가를 살려냈어요! 아무도 죽지 않았어요.');
-    else {
-      t.alive = false;
-      sysAll(`☠️ 밤사이 ${t.name}님이 마피아에게 살해당했어요.`);
-      deliver(t.id, { type:'sys', kind:'private', text:'당신은 살해당했어요. 이제 죽은 사람끼리만 대화할 수 있어요.' });
+    if (N.doctor === t.id) story = '💉 마피아가 누군가를 공격했지만, 의사의 치료로 목숨을 건졌습니다!';
+    else if (t.armor) {
+      t.armor = false;
+      story = '💪 마피아가 누군가를 공격했지만, 그 사람은 공격을 버텨냈습니다!';
+      mcTo(t.id, '🪖 군인인 당신은 마피아의 공격을 버텨냈습니다. 다음 공격은 막을 수 없어요.');
+    } else {
+      victim = t;
+      story = `☠️ 간밤에 ${t.name}님이 마피아에게 살해당했습니다.`;
+      mcTo(t.id, '당신은 마피아에게 살해당했습니다. 이제 죽은 사람끼리만 대화할 수 있어요.');
     }
-  } else sysAll('🌙 조용한 밤이었어요. 아무 일도 일어나지 않았어요.');
+  } else story = '🌙 아무 일도 없는 조용한 밤이었습니다.';
   H.day++;
+  mc(`지난밤 소식을 전해드리겠습니다. ${story}`);
+  if (victim) kill(victim);
+  // 기자 특종
+  if (N.reporter) {
+    const rep = H.players.find(q => q.role === 'reporter');
+    const tgt = P(N.reporter);
+    if (rep && rep.alive && tgt) mc(`📰 [특종] 기자의 단독 취재! ${tgt.name}님의 직업은 '${ROLE[tgt.role].name}'입니다!`);
+  }
   if (checkWin()) return;
   startDay();
 }
+function kill(t){
+  t.alive = false;
+  if (t.role === 'lover') {
+    const o = H.players.find(q => q.role === 'lover' && q.id !== t.id && q.alive);
+    if (o) {
+      o.alive = false;
+      mc(`💔 ${o.name}님은 연인 ${t.name}님을 잃은 슬픔을 이기지 못하고 세상을 떠났습니다...`);
+      mcTo(o.id, '연인을 따라 세상을 떠났습니다. 이제 죽은 사람끼리만 대화할 수 있어요.');
+    }
+  }
+}
 function checkWin(){
   const alive = H.players.filter(q => q.alive);
-  const m = alive.filter(q => q.role === 'mafia').length, o = alive.length - m;
+  const mafia = alive.filter(q => q.role === 'mafia').length;
+  const mteam = alive.filter(q => ROLE[q.role].team === 'mafia').length;
   let w = null;
-  if (m === 0) w = 'citizen'; else if (m >= o) w = 'mafia';
+  if (mafia === 0) w = 'citizen'; else if (mteam >= alive.length - mteam) w = 'mafia';
   if (!w) return false;
   clearTimeout(H.timer);
   H.winner = w; H.phase = 'end'; H.endAt = 0;
-  sysAll(w === 'mafia' ? '🔪 마피아 승리! 마피아가 마을을 장악했어요.' : '🎉 시민 승리! 마피아를 모두 찾아냈어요.');
-  sysAll('📜 역할 공개: ' + H.players.map(q => `${q.name}(${ROLE[q.role].name})`).join(', '));
+  mc(w === 'mafia' ? '🔪 게임이 끝났습니다. 마피아가 마을을 장악했습니다. 마피아 팀의 승리입니다!' : '🎉 게임이 끝났습니다. 마피아를 모두 찾아냈습니다. 시민 팀의 승리입니다!');
+  mc('📜 역할 공개: ' + H.players.map(q => `${q.name}(${ROLE[q.role].name})`).join(', '));
   broadcastState();
   return true;
 }
@@ -663,18 +862,18 @@ function hostLeave(pid){
   const p = P(pid); if (!p || !p.online) return;
   if (!inGame()) {
     H.players = H.players.filter(q => q.id !== pid);
-    sysAll(`${p.name}님이 나갔어요.`);
+    mc(`${p.name}님이 나갔습니다.`);
     broadcastState();
     return;
   }
   p.online = false;
   const wasAlive = p.alive;
   p.alive = false; delete H.votes[pid];
-  sysAll(`🚪 ${p.name}님이 게임을 나갔어요${wasAlive ? ' (사망 처리)' : ''}.`);
+  mc(`🚪 ${p.name}님이 게임을 나갔습니다${wasAlive ? ' (사망 처리)' : ''}.`);
   if (checkWin()) return;
+  checkVoteDone();
+  checkNightDone();
   broadcastState();
-  if (H.phase === 'vote' && H.players.filter(q => q.alive).every(q => H.votes[q.id])) hurry(resolveVote);
-  if (H.phase === 'night') checkNightDone();
 }
 
 window.addEventListener('beforeunload', e => {
